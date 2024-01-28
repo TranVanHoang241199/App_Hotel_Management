@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/components/custom_input_field.dart';
-import 'package:flutter_app_hotel_management/utils/api_helper.dart';
+import 'package:flutter_app_hotel_management/widgets/input_widgets.dart';
+import 'package:flutter_app_hotel_management/models/user_model.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
+import 'package:flutter_app_hotel_management/utils/enum_help.dart';
 import 'package:flutter_app_hotel_management/views/login/login_view.dart';
+import 'package:flutter_app_hotel_management/views/register/register_viewmodel.dart';
 
 class RegisterPage extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
@@ -19,11 +21,12 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final _registerViewModel = RegisterViewModel();
+  UserRole selectedRole = UserRole.admin;
 
   bool isLoading = false;
   String errorMessage = '';
   bool isDeleted = false;
-  String selectedRole = 'Adminstrator';
 
   Future<void> registerUser(BuildContext context) async {
     setState(() {
@@ -31,17 +34,20 @@ class _RegisterPageState extends State<RegisterPage> {
       errorMessage = '';
     });
 
-    final result = await ApiHelper.registerUser(
-      username: usernameController.text,
+    UserModel model = UserModel(
+      userName: usernameController.text,
       password: passwordController.text,
       fullName: fullNameController.text,
       phone: phoneController.text,
       email: emailController.text,
+      businessAreas: 0,
       isDeleted: isDeleted,
       role: selectedRole,
     );
 
-    if (result['success']) {
+    final result = await _registerViewModel.registerUser(model);
+
+    if (result.status == 200) {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
@@ -51,13 +57,13 @@ class _RegisterPageState extends State<RegisterPage> {
       // ignore: avoid_print
       print("Đăng ký thành công!");
       // ignore: avoid_print
-      print("Thông tin tài khoản: ${result['data']}");
+      print("Thông tin tài khoản: ${result.data?.toJson()}");
     } else {
-      errorMessage = result['message'];
-
+      errorMessage = result.message.toString();
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          // ignore: avoid_print
           content: Text("Đăng ký thất bại. Lỗi: $errorMessage"),
           duration: const Duration(seconds: 3),
         ),
@@ -83,35 +89,35 @@ class _RegisterPageState extends State<RegisterPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomInputField(
+                CustomInputFieldWidgets(
                   controller: usernameController,
                   hintText: 'Username',
                   inputType: TextInputType.text,
-                  icon: Icons.location_on,
+                  icon: Icons.person,
                 ),
                 Config.spaceSmall,
-                CustomInputField(
+                CustomInputFieldWidgets(
                   controller: passwordController,
                   hintText: 'Password',
                   inputType: TextInputType.text,
-                  icon: Icons.location_on,
+                  icon: Icons.lock,
                 ),
                 Config.spaceSmall,
-                CustomInputField(
+                CustomInputFieldWidgets(
                   controller: fullNameController,
                   hintText: 'Họ và tên',
                   inputType: TextInputType.text,
                   icon: Icons.person,
                 ),
                 Config.spaceSmall,
-                CustomInputField(
+                CustomInputFieldWidgets(
                   controller: phoneController,
                   hintText: 'Số điện thoại',
                   inputType: TextInputType.phone,
                   icon: Icons.phone,
                 ),
                 Config.spaceSmall,
-                CustomInputField(
+                CustomInputFieldWidgets(
                   controller: emailController,
                   hintText: 'Email',
                   inputType: TextInputType.emailAddress,
@@ -137,19 +143,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   children: [
                     const Text('Role: '),
-                    DropdownButton<String>(
+                    DropdownButton<UserRole>(
                       value: selectedRole,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedRole = newValue!;
-                        });
+                      onChanged: (UserRole? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            selectedRole = newValue;
+                          });
+                        }
                       },
-                      items: <String>['Adminstrator', 'User', 'Guest']
-                          .map<DropdownMenuItem<String>>(
-                        (String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                      items: UserRole.values.map<DropdownMenuItem<UserRole>>(
+                        (UserRole role) {
+                          return DropdownMenuItem<UserRole>(
+                            value: role,
+                            child: Text(EnumHelp.getDisplayRoleText(role)),
                           );
                         },
                       ).toList(),

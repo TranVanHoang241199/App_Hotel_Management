@@ -1,9 +1,9 @@
-import 'package:flutter_app_hotel_management/components/login/login_form.dart';
+import 'package:flutter_app_hotel_management/views/components/login_form.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
 import 'package:flutter_app_hotel_management/views/home/home_view.dart';
 import 'package:flutter_app_hotel_management/views/login/login_viewmodel.dart';
 import 'package:flutter_app_hotel_management/views/register/register_view.dart';
-import 'package:flutter_app_hotel_management/widgets/login/logo_widget.dart';
+import 'package:flutter_app_hotel_management/widgets/logo_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
@@ -44,10 +44,10 @@ class _BodyWidgetState extends State<BodyWidget> {
     // Gọi hàm xử lý đăng nhập trong LoginViewModel
     final loginResult = await loginViewModel.signUserIn(username, password);
 
-    if (loginResult['success']) {
+    if (loginResult.status == 200) {
       // Lưu trữ accessToken vào SharedPreferences khi đăng nhập thành công
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('accessToken', loginResult['accessToken']);
+      await prefs.setString('accessToken', loginResult.accessToken.toString());
 
       // Chuyển hướng đến màn hình chính (HomePage)
       // ignore: use_build_context_synchronously
@@ -59,7 +59,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Đăng nhập thất bại loi: ${loginResult['message']}"),
+          content: Text("Đăng nhập thất bại loi: ${loginResult.message}"),
           duration: const Duration(seconds: 3),
         ),
       );

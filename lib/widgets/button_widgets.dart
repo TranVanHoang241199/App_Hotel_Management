@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/views/login/login_viewmodel.dart';
 
-class MyButton extends StatelessWidget {
+class ButtonWidgets extends StatelessWidget {
   final Function()? onTap;
   final LoginViewModel loginViewModel;
 
-  const MyButton({Key? key, required this.onTap, required this.loginViewModel})
+  const ButtonWidgets(
+      {Key? key, required this.onTap, required this.loginViewModel})
       : super(key: key);
 
   @override

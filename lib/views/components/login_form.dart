@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/components/login/login_button.dart';
-import 'package:flutter_app_hotel_management/components/pass_text_field.dart';
-import 'package:flutter_app_hotel_management/components/user_text_field.dart';
+import 'package:flutter_app_hotel_management/widgets/button_widgets.dart';
+import 'package:flutter_app_hotel_management/widgets/pass_input_widgets.dart';
+import 'package:flutter_app_hotel_management/widgets/user_input_widget.dart';
 import 'package:flutter_app_hotel_management/views/login/login_viewmodel.dart';
 
 class LoginForm extends StatelessWidget {
@@ -25,13 +25,13 @@ class LoginForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
-          UserTextField(
+          UserTextFieldWidgets(
             controller: usernameController, // truyen Username control
             hintText: 'Username', // truyen name control
             loginViewModel: loginViewModel,
           ),
           const SizedBox(height: 10),
-          PassTextField(
+          PassTextFieldWidgets(
             controller: passwordController,
             hintText: 'Password',
             loginViewModel: loginViewModel,
@@ -50,7 +50,7 @@ class LoginForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 25),
-          MyButton(
+          ButtonWidgets(
             onTap: () => signUserIn(context),
             loginViewModel: loginViewModel,
           ),

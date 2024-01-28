@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:flutter_app_hotel_management/utils/api_helper.dart';
+import 'package:flutter_app_hotel_management/utils/api_response.dart';
+import 'package:flutter_app_hotel_management/services/api_auth_service.dart';
 import 'package:flutter_app_hotel_management/utils/validation.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -38,10 +39,9 @@ class LoginViewModel {
     });
   }
 
-  Future<Map<String, dynamic>> signUserIn(
-      String username, String password) async {
+  Future<ApiResponseAuth> signUserIn(String username, String password) async {
     // Sử dụng hàm từ ApiHelper
-    return await ApiHelper.loginUser(username, password);
+    return await ApiAuthService.loginUser(username, password);
   }
 
   void dispose() {
