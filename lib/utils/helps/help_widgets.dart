@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/widgets/error_dialog_widgets.dart';
+import 'package:flutter_app_hotel_management/presentation/widgets/error_dialog_widget.dart';
 
 class HelpWidgets {
   static void showErrorDialog(BuildContext context, String errorMessage,

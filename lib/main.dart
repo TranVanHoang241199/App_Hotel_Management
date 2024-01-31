@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
-import 'package:flutter_app_hotel_management/views/home/home_view.dart';
-import 'views/login/login_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/home_view.dart';
+import 'presentation/views/login/login_view.dart';
 
 void main() {
   runApp(const MyApp());
