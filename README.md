@@ -25,6 +25,8 @@ lib/
 |       |-- example_widget.dart
 |   |-- components/
 |       |-- example_component.dart
+|   |-- viewmodels/
+|       |-- example_viewmodel.dart
 |-- utils/
 |   |-- example_utils.dart
 |-- routes/
