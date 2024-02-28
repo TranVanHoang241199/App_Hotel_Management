@@ -1,91 +1,50 @@
 import 'package:flutter_app_hotel_management/presentation/components/login/login_form.dart';
-import 'package:flutter_app_hotel_management/utils/config.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/views/login/login_viewmodel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/presentation/views/register/register_view.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/logo_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_app_hotel_management/utils/config.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  final LoginViewModel _loginBloc = LoginViewModel();
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: BodyWidget(),
+    return Scaffold(
+      body: BodyWidget(loginBloc: _loginBloc),
     );
   }
 }
 
 class BodyWidget extends StatefulWidget {
-  const BodyWidget({Key? key}) : super(key: key);
+  final LoginViewModel loginBloc;
+
+  const BodyWidget({Key? key, required this.loginBloc}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _BodyWidgetState createState() => _BodyWidgetState();
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final loginViewModel = LoginViewModel();
-
-  bool isLoading = false;
-
-  void signUserIn(BuildContext context) async {
-    setState(() {
-      isLoading = true; // Bắt đầu đăng nhập, hiển thị vòng tròn xoay
-    });
-
-    final String username = usernameController.text;
-    final String password = passwordController.text;
-
-    // Gọi hàm xử lý đăng nhập trong LoginViewModel
-    final loginResult = await loginViewModel.signUserIn(username, password);
-
-    if (loginResult.status == 200) {
-      // Lưu trữ accessToken vào SharedPreferences khi đăng nhập thành công
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('accessToken', loginResult.accessToken.toString());
-
-      // Chuyển hướng đến màn hình chính (HomePage)
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } else {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Đăng nhập thất bại loi: ${loginResult.message}"),
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    }
-
-    setState(() {
-      isLoading = false; // Kết thúc đăng nhập, ẩn vòng tròn xoay
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     usernameController.addListener(() {
-      loginViewModel.usernameSink.add(usernameController.text);
+      widget.loginBloc.setUsername(usernameController.text);
     });
 
     passwordController.addListener(() {
-      loginViewModel.passSink.add(passwordController.text);
+      widget.loginBloc.setPassword(passwordController.text);
     });
   }
 
   @override
   void dispose() {
+    widget.loginBloc.dispose();
     super.dispose();
-    loginViewModel.dispose();
   }
 
   @override
@@ -107,7 +66,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                 LoginForm(
                   usernameController: usernameController,
                   passwordController: passwordController,
-                  loginViewModel: loginViewModel,
+                  loginViewModel: _loginBloc,
                   signUserIn: signUserIn,
                 ),
                 const SizedBox(height: 50),
@@ -172,9 +131,16 @@ class _BodyWidgetState extends State<BodyWidget> {
                 const SizedBox(height: 20),
               ],
             ),
-
             // Hiển thị vòng tròn xoay khi đang đăng nhập
-            if (isLoading) const CircularProgressIndicator(),
+            StreamBuilder<bool>(
+              stream: widget.loginBloc.btnLoginStream,
+              builder: (context, snapshot) {
+                bool isLoading = snapshot.data ?? false;
+                return isLoading
+                    ? const CircularProgressIndicator()
+                    : Container();
+              },
+            ),
           ],
         ),
       ),

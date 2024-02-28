@@ -1,52 +1,50 @@
 import 'dart:async';
+import 'package:flutter_app_hotel_management/data/repositories/auth_repository.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
-import 'package:flutter_app_hotel_management/data/api_services/auth_api_service.dart';
 import 'package:flutter_app_hotel_management/utils/validation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginViewModel {
-  final _usernameSubject = BehaviorSubject<String>();
-  final _passSubject = BehaviorSubject<String>();
-  final _btnLoginSubject = BehaviorSubject<bool>();
+  final _usernameController = StreamController<String>();
+  final _passwordController = StreamController<String>();
+  final _btnLoginController = StreamController<bool>();
+  final _loginResultController = StreamController<ApiResponseAuth>();
+  final AuthRepository _authRepository = AuthRepository();
 
-  var usernameValidation = StreamTransformer<String, String>.fromHandlers(
-      handleData: (username, sink) {
-    sink.add(Validation.validateUsername(username));
-  });
+  Stream<String> get usernameStream => _usernameController.stream;
+  Stream<String> get passwordStream => _passwordController.stream;
+  Stream<bool> get btnLoginStream => _btnLoginController.stream;
+  Stream<ApiResponseAuth> get loginResultStream =>
+      _loginResultController.stream;
 
-  var passValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (pass, sink) {
-    sink.add(Validation.validatePassword(pass));
-  });
-
-  Stream<String> get usernameStream =>
-      _usernameSubject.stream.transform(usernameValidation);
-  Sink<String> get usernameSink => _usernameSubject.sink;
-
-  Stream<String> get passStream =>
-      _passSubject.stream.transform(passValidation);
-  Sink<String> get passSink => _passSubject.sink;
-
-  Stream<bool> get btnLoginStream => _btnLoginSubject.stream;
-  Sink<bool> get btnLoginSink => _btnLoginSubject.sink;
-
-  LoginViewModel() {
-    Rx.combineLatest2(_usernameSubject, _passSubject, (username, pass) {
+  LoginBloc() {
+    Rx.combineLatest2(_usernameController.stream, _passwordController.stream,
+        (username, password) {
       return Validation.validateUsername(username) == '' &&
-          Validation.validatePassword(pass) == '';
+          Validation.validatePassword(password) == '';
     }).listen((enable) {
-      btnLoginSink.add(enable);
+      _btnLoginController.add(enable);
     });
   }
 
-  Future<ApiResponseAuth> signUserIn(String username, String password) async {
-    // Sử dụng hàm từ ApiHelper
-    return await AuthApiService.loginUser(username, password);
+  void loginUser(String username, String password) async {
+    ApiResponseAuth loginResult =
+        await _authRepository.loginUser(username, password);
+    _loginResultController.add(loginResult);
   }
 
   void dispose() {
-    _usernameSubject.close();
-    _passSubject.close();
-    _btnLoginSubject.close();
+    _usernameController.close();
+    _passwordController.close();
+    _btnLoginController.close();
+    _loginResultController.close();
+  }
+
+  void setUsername(String username) {
+    _usernameController.add(username);
+  }
+
+  void setPassword(String password) {
+    _passwordController.add(password);
   }
 }

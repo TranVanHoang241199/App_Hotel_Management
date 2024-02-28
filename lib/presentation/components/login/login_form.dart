@@ -8,14 +8,12 @@ class LoginForm extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController;
   final TextEditingController passwordController;
-  final Function(BuildContext) signUserIn;
   final LoginViewModel loginViewModel;
 
   LoginForm({
     Key? key,
     required this.usernameController,
     required this.passwordController,
-    required this.signUserIn,
     required this.loginViewModel,
   }) : super(key: key);
 
@@ -26,8 +24,8 @@ class LoginForm extends StatelessWidget {
       child: Column(
         children: [
           UserTextFieldWidgets(
-            controller: usernameController, // truyen Username control
-            hintText: 'Username', // truyen name control
+            controller: usernameController,
+            hintText: 'Username',
             loginViewModel: loginViewModel,
           ),
           const SizedBox(height: 10),
@@ -51,7 +49,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           ButtonWidgets(
-            onTap: () => signUserIn(context),
+            onTap: () => loginViewModel.signUserIn(context),
             loginViewModel: loginViewModel,
           ),
         ],

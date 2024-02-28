@@ -1,7 +1,7 @@
 // api_room_service.dart
 import 'dart:convert';
 import 'package:flutter_app_hotel_management/data/models/room_model.dart';
-import 'package:flutter_app_hotel_management/routes/app_routes.dart';
+import 'package:flutter_app_hotel_management/routes/api_routes.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +15,7 @@ class ApiRoomService {
 
       final response = await http.get(
         Uri.parse(
-          '${AppRoutes.apiUrl_room_GetAllRooms}?currentPage=$currentPage&pageSize=$pageSize',
+          '${ApiRoutes.apiUrl_room_GetAllRooms}?currentPage=$currentPage&pageSize=$pageSize',
         ),
         headers: {
           'Authorization': 'Bearer ${accessToken}',
