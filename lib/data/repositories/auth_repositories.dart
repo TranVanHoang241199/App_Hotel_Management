@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_app_hotel_management/data/models/user_model.dart';
+import 'package:flutter_app_hotel_management/routes/api_routes.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
-import 'package:flutter_app_hotel_management/routes/app_routes.dart';
 import 'package:http/http.dart' as http;
 
-class AuthApiService {
+class AuthRepositories {
   static const Map<String, String> _headers = {
     "Content-Type": "application/json",
   };
@@ -18,7 +18,7 @@ class AuthApiService {
 
     try {
       final response = await http.post(
-        Uri.parse(AppRoutes.apiUrl_auth_login),
+        Uri.parse(ApiRoutes.apiUrl_auth_login),
         headers: _headers,
         body: jsonEncode(data),
       );
@@ -41,7 +41,7 @@ class AuthApiService {
   static Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
     try {
       final response = await http.post(
-        Uri.parse(AppRoutes.apiUrl_auth_register),
+        Uri.parse(ApiRoutes.apiUrl_auth_register),
         headers: _headers,
         body: jsonEncode(model.toJson()),
       );

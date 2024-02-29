@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/views/login/login_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/login_view.dart';
 
 Future<void> showLogoutDialog(BuildContext context) async {
   return showDialog(

@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:flutter_app_hotel_management/data/repositories/auth_repositories.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
-import 'package:flutter_app_hotel_management/data/api_services/auth_api_service.dart';
 import 'package:flutter_app_hotel_management/utils/validation.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginViewModel {
+class LoginBloC {
   final _usernameSubject = BehaviorSubject<String>();
   final _passSubject = BehaviorSubject<String>();
   final _btnLoginSubject = BehaviorSubject<bool>();
@@ -30,7 +30,7 @@ class LoginViewModel {
   Stream<bool> get btnLoginStream => _btnLoginSubject.stream;
   Sink<bool> get btnLoginSink => _btnLoginSubject.sink;
 
-  LoginViewModel() {
+  LoginBloC() {
     Rx.combineLatest2(_usernameSubject, _passSubject, (username, pass) {
       return Validation.validateUsername(username) == '' &&
           Validation.validatePassword(pass) == '';
@@ -41,7 +41,7 @@ class LoginViewModel {
 
   Future<ApiResponseAuth> signUserIn(String username, String password) async {
     // Sử dụng hàm từ ApiHelper
-    return await AuthApiService.loginUser(username, password);
+    return await AuthRepositories.loginUser(username, password);
   }
 
   void dispose() {
