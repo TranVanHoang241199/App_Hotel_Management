@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter_app_hotel_management/data/models/user_model.dart';
-import 'package:flutter_app_hotel_management/data/api_services/auth_api_service.dart';
+import 'package:flutter_app_hotel_management/data/repositories/auth_repositories.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
 import 'package:flutter_app_hotel_management/utils/validation.dart';
 import 'package:rxdart/rxdart.dart';
 
-class RegisterViewModel {
+class RegisterBloC {
   final _usernameSubject = BehaviorSubject<String>();
   final _passSubject = BehaviorSubject<String>();
   final _fullNameSubject = BehaviorSubject<String>();
@@ -55,7 +55,7 @@ class RegisterViewModel {
   Stream<bool> get btnRegisterStream => _btnRegisterSubject.stream;
   Sink<bool> get btnRegisterSink => _btnRegisterSubject.sink;
 
-  RegisterViewModel() {
+  RegisterBloC() {
     Rx.combineLatest2(_usernameSubject, _passSubject, (username, pass) {
       return Validation.validateUsername(username) == '' &&
           Validation.validatePassword(pass) == '';
@@ -66,7 +66,7 @@ class RegisterViewModel {
 
   Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
     // Sử dụng hàm từ ApiHelper
-    return await AuthApiService.registerUser(model);
+    return await AuthRepositories.registerUser(model);
   }
 
   void dispose() {

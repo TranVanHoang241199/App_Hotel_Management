@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_hotel_management/bloc/home_bloc/home_bloc.dart';
 import 'package:flutter_app_hotel_management/utils/helps/help_widgets.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/room_item_widget.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/home_viewmodel.dart';
 
 class RoomHomeScreen extends StatefulWidget {
   const RoomHomeScreen({Key? key}) : super(key: key);
@@ -11,18 +11,18 @@ class RoomHomeScreen extends StatefulWidget {
 }
 
 class _RoomHomeScreenState extends State<RoomHomeScreen> {
-  late HomeViewModel _homeViewModel;
+  late HomeBloC _homeBloC;
   late GlobalKey<RefreshIndicatorState> _refreshKey;
   late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-    _homeViewModel = HomeViewModel();
-    _homeViewModel.selectedItems = [];
-    _homeViewModel.roomData = [];
-    _homeViewModel.search = '';
-    _homeViewModel.currentPage = 1;
+    _homeBloC = HomeBloC();
+    _homeBloC.selectedItems = [];
+    _homeBloC.roomData = [];
+    _homeBloC.search = '';
+    _homeBloC.currentPage = 1;
     _refreshKey = GlobalKey<RefreshIndicatorState>();
     _scrollController = ScrollController();
     fetchData();
@@ -31,14 +31,14 @@ class _RoomHomeScreenState extends State<RoomHomeScreen> {
 
   Future<void> fetchData() async {
     try {
-      final response = await _homeViewModel.getAllRooms(
-          _homeViewModel.search, _homeViewModel.currentPage);
+      final response =
+          await _homeBloC.getAllRooms(_homeBloC.search, _homeBloC.currentPage);
 
       if (response.status == 200) {
         setState(() {
-          _homeViewModel.roomData = response.data ?? [];
-          _homeViewModel.selectedItems =
-              List.generate(_homeViewModel.roomData.length, (index) => false);
+          _homeBloC.roomData = response.data ?? [];
+          _homeBloC.selectedItems =
+              List.generate(_homeBloC.roomData.length, (index) => false);
         });
       } else {
         HelpWidgets.showErrorDialog(
@@ -57,17 +57,16 @@ class _RoomHomeScreenState extends State<RoomHomeScreen> {
    */
   Future<void> _loadMoreData() async {
     try {
-      final response = await _homeViewModel.getAllRooms(
-          _homeViewModel.search, _homeViewModel.currentPage + 1);
+      final response = await _homeBloC.getAllRooms(
+          _homeBloC.search, _homeBloC.currentPage + 1);
 
       if (response.status == 200) {
         setState(() {
-          _homeViewModel.roomData.addAll(response.data ?? []);
-          _homeViewModel.selectedItems.addAll(
+          _homeBloC.roomData.addAll(response.data ?? []);
+          _homeBloC.selectedItems.addAll(
             List.generate(response.data!.length, (index) => false),
           );
-          _homeViewModel
-              .currentPage++; // Increase the page number for the next load
+          _homeBloC.currentPage++; // Increase the page number for the next load
         });
       } else {
         // ignore: use_build_context_synchronously
@@ -93,8 +92,7 @@ class _RoomHomeScreenState extends State<RoomHomeScreen> {
 
   void _toggleSelectedItem(int index) {
     setState(() {
-      _homeViewModel.selectedItems[index] =
-          !_homeViewModel.selectedItems[index];
+      _homeBloC.selectedItems[index] = !_homeBloC.selectedItems[index];
     });
   }
 
@@ -193,10 +191,10 @@ class _RoomHomeScreenState extends State<RoomHomeScreen> {
       body: RefreshIndicator(
         key: _refreshKey,
         onRefresh: () async {
-          _homeViewModel.currentPage = 1;
+          _homeBloC.currentPage = 1;
           await fetchData();
         },
-        child: _homeViewModel.roomData.isEmpty
+        child: _homeBloC.roomData.isEmpty
             ? const Center(
                 child: CircularProgressIndicator(),
               )
@@ -208,11 +206,11 @@ class _RoomHomeScreenState extends State<RoomHomeScreen> {
                   mainAxisSpacing: 8.0,
                 ),
                 controller: _scrollController,
-                itemCount: _homeViewModel.roomData.length,
+                itemCount: _homeBloC.roomData.length,
                 itemBuilder: (BuildContext context, int index) {
                   return RoomItemWidget(
-                    room: _homeViewModel.roomData[index],
-                    selected: _homeViewModel.selectedItems[index],
+                    room: _homeBloC.roomData[index],
+                    selected: _homeBloC.selectedItems[index],
                     onTap: () => _toggleSelectedItem(index),
                     onDoubleTap: () => _handleItemDoubleTap(index),
                     onLongPress: () => _handleItemLongPress(index, context),

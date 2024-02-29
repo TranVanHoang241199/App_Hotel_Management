@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/views/login/login_viewmodel.dart';
+import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
 
 class UserTextFieldWidgets extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final LoginViewModel loginViewModel;
+  final LoginBloC loginBloC;
 
   const UserTextFieldWidgets({
     Key? key,
     required this.controller,
     required this.hintText,
-    required this.loginViewModel,
+    required this.loginBloC,
   }) : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class UserTextFieldWidgets extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: StreamBuilder<String>(
-        stream: loginViewModel.usernameStream,
+        stream: loginBloC.usernameStream,
         builder: (context, snapshot) {
           return TextFormField(
             controller: controller,

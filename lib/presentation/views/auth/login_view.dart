@@ -1,8 +1,8 @@
+import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
 import 'package:flutter_app_hotel_management/presentation/components/login/login_form.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/home_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/login/login_viewmodel.dart';
-import 'package:flutter_app_hotel_management/presentation/views/register/register_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/register_view.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/logo_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class BodyWidget extends StatefulWidget {
 class _BodyWidgetState extends State<BodyWidget> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final loginViewModel = LoginViewModel();
+  final loginBloC = LoginBloC();
 
   bool isLoading = false;
 
@@ -41,8 +41,8 @@ class _BodyWidgetState extends State<BodyWidget> {
     final String username = usernameController.text;
     final String password = passwordController.text;
 
-    // Gọi hàm xử lý đăng nhập trong LoginViewModel
-    final loginResult = await loginViewModel.signUserIn(username, password);
+    // Gọi hàm xử lý đăng nhập trong LoginBloC
+    final loginResult = await loginBloC.signUserIn(username, password);
 
     if (loginResult.status == 200) {
       // Lưu trữ accessToken vào SharedPreferences khi đăng nhập thành công
@@ -74,18 +74,18 @@ class _BodyWidgetState extends State<BodyWidget> {
   void initState() {
     super.initState();
     usernameController.addListener(() {
-      loginViewModel.usernameSink.add(usernameController.text);
+      loginBloC.usernameSink.add(usernameController.text);
     });
 
     passwordController.addListener(() {
-      loginViewModel.passSink.add(passwordController.text);
+      loginBloC.passSink.add(passwordController.text);
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    loginViewModel.dispose();
+    loginBloC.dispose();
   }
 
   @override
@@ -107,7 +107,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                 LoginForm(
                   usernameController: usernameController,
                   passwordController: passwordController,
-                  loginViewModel: loginViewModel,
+                  loginBloC: loginBloC,
                   signUserIn: signUserIn,
                 ),
                 const SizedBox(height: 50),

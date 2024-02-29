@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/components/home/customer_home_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/components/home/history_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/customer_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/history_home_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/components/home/order_home_Button.dart';
 import 'package:flutter_app_hotel_management/presentation/components/home/create_order_dialog.dart';
-import 'package:flutter_app_hotel_management/presentation/components/home/room_home_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/components/home/service_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/room_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/service_home_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 import 'package:flutter_app_hotel_management/presentation/views/order/order_view.dart';
 

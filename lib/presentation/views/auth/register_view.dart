@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_hotel_management/bloc/register_bloc/register_bloc.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/input_widget.dart';
 import 'package:flutter_app_hotel_management/data/models/user_model.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
 import 'package:flutter_app_hotel_management/utils/enum_help.dart';
-import 'package:flutter_app_hotel_management/presentation/views/login/login_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/register/register_viewmodel.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/login_view.dart';
 
 class RegisterPage extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
@@ -21,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final _registerViewModel = RegisterViewModel();
+  final _registerBloC = RegisterBloC();
   UserRole selectedRole = UserRole.admin;
 
   bool isLoading = false;
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
       role: selectedRole,
     );
 
-    final result = await _registerViewModel.registerUser(model);
+    final result = await _registerBloC.registerUser(model);
 
     if (result.status == 200) {
       // ignore: use_build_context_synchronously

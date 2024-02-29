@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/views/login/login_viewmodel.dart';
+import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
 
 class ButtonWidgets extends StatelessWidget {
   final Function()? onTap;
-  final LoginViewModel loginViewModel;
+  final LoginBloC loginBloC;
 
-  const ButtonWidgets(
-      {Key? key, required this.onTap, required this.loginViewModel})
+  const ButtonWidgets({Key? key, required this.onTap, required this.loginBloC})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: loginViewModel.btnLoginStream,
+      stream: loginBloC.btnLoginStream,
       builder: (context, snapshot) {
         return GestureDetector(
           onTap: snapshot.data == true ? onTap : null,
