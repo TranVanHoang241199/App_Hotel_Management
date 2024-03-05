@@ -8,14 +8,14 @@ import 'package:flutter_app_hotel_management/presentation/views/home/service_hom
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 import 'package:flutter_app_hotel_management/presentation/views/order/order_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool _isSearching = false;
 

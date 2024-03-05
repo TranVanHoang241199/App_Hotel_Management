@@ -53,7 +53,7 @@ class _BodyWidgetState extends State<BodyWidget> {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } else {
       // ignore: use_build_context_synchronously
