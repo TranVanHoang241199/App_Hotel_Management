@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 
-class RetrievalPage extends StatefulWidget {
-  const RetrievalPage({Key? key}) : super(key: key);
+class RetrievalScreen extends StatefulWidget {
+  const RetrievalScreen({Key? key}) : super(key: key);
 
   @override
-  State<RetrievalPage> createState() => _RetrievalViewState();
+  State<RetrievalScreen> createState() => _RetrievalViewState();
 }
 
-class _RetrievalViewState extends State<RetrievalPage> {
+class _RetrievalViewState extends State<RetrievalScreen> {
   TextEditingController _searchController = TextEditingController();
   List<String> dataList = [
     'Item 1',

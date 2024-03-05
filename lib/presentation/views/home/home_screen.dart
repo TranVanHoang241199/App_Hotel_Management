@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/customer_home_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/history_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/customer_home_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/history_home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/components/home/order_home_Button.dart';
 import 'package:flutter_app_hotel_management/presentation/components/home/create_order_dialog.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/room_home_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/service_home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/room_home_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/service_home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
-import 'package:flutter_app_hotel_management/presentation/views/order/order_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/order/order_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,10 +20,10 @@ class _HomePageState extends State<HomePage> {
   bool _isSearching = false;
 
   List<Widget> _pages = [
-    const RoomHomeScreen(),
-    const ServiceHomeScreen(),
-    const CustomerHomeScreen(),
-    const HistoryHomeScreen(),
+    const RoomHomeView(),
+    const ServiceHomeView(),
+    const CustomerHomeView(),
+    const HistoryHomeView(),
   ];
 
   void _onItemTapped(int index) {
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OrderView(),
+            builder: (context) => OrderScreen(),
           ),
         );
       };

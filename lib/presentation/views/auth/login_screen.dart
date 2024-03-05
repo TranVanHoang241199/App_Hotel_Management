@@ -1,14 +1,14 @@
 import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
 import 'package:flutter_app_hotel_management/presentation/components/login/login_form.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/register_screen.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/home_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/auth/register_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/home_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/logo_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +156,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const RegisterPage()),
+                              builder: (context) => const RegisterScreen()),
                         );
                       },
                       child: const Text(

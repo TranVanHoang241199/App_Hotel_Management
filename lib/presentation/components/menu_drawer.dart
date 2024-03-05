@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/show_logout_dialog_widget.dart';
-import 'package:flutter_app_hotel_management/presentation/views/System/system_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/home/home_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/profile/profile_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/retrieval/retrieval_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/setting/setting_view.dart';
-import 'package:flutter_app_hotel_management/presentation/views/statistical/statistical_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/System/system_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/home/home_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/profile/profile_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/retrieval/retrieval_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/setting/setting_screen.dart';
+import 'package:flutter_app_hotel_management/presentation/views/statistical/statistical_screen.dart';
 
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StatisticalPage(),
+                  builder: (context) => const StatisticalScreen(),
                 ),
               );
             },
@@ -57,7 +57,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RetrievalPage(),
+                  builder: (context) => const RetrievalScreen(),
                 ),
               );
             },
@@ -69,7 +69,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SystemPage(),
+                  builder: (context) => const SystemScreen(),
                 ),
               );
             },
@@ -81,7 +81,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
+                  builder: (context) => const ProfileScreen(),
                 ),
               );
             },
@@ -93,7 +93,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SettingPage(),
+                  builder: (context) => const SettingScreen(),
                 ),
               );
             },

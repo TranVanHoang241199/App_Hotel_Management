@@ -12,21 +12,17 @@ lib/
 |-- bloc/
 |   |-- example_bloc.dart
 |-- data/
-|   |-- repositories/
-|       |-- example_repository.dart
 |   |-- models/
 |       |-- example_model.dart
-|   |-- api_services/
-|       |-- example_api_service.dart
+|   |-- repositories/
+|       |-- example_repository.dart
 |-- presentation/
-|   |-- screens/
+|   |-- components/
+|       |-- example_component.dart
+|   |-- views/
 |       |-- example_screen.dart
 |   |-- widgets/
 |       |-- example_widget.dart
-|   |-- components/
-|       |-- example_component.dart
-|   |-- viewmodels/
-|       |-- example_viewmodel.dart
 |-- utils/
 |   |-- example_utils.dart
 |-- routes/

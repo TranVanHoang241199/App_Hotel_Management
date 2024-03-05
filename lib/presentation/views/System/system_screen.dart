@@ -5,14 +5,14 @@ import 'package:flutter_app_hotel_management/presentation/components/System/room
 import 'package:flutter_app_hotel_management/presentation/components/System/service_system_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 
-class SystemPage extends StatefulWidget {
-  const SystemPage({Key? key}) : super(key: key);
+class SystemScreen extends StatefulWidget {
+  const SystemScreen({super.key});
 
   @override
-  State<SystemPage> createState() => _SystemPageState();
+  State<SystemScreen> createState() => _SystemPageState();
 }
 
-class _SystemPageState extends State<SystemPage> {
+class _SystemPageState extends State<SystemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,10 +184,10 @@ class SecondPage extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: SystemPage(),
-    ),
-  );
-}
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       home: SystemScreen(),
+//     ),
+//   );
+// }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/views/auth/login_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/login_screen.dart';
 
 Future<void> showLogoutDialog(BuildContext context) async {
   return showDialog(
@@ -21,7 +21,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
               Navigator.of(context).pop();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             },
             child: Text('Đăng xuất'),

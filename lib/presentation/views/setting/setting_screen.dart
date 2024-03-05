@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({super.key});
 
   @override
-  State<SettingPage> createState() => _SettingViewState();
+  State<SettingScreen> createState() => _SettingViewState();
 }
 
-class _SettingViewState extends State<SettingPage> {
+class _SettingViewState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

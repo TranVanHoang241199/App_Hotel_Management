@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/bloc/register_bloc/register_bloc.dart';
+import 'package:flutter_app_hotel_management/presentation/views/auth/login_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/input_widget.dart';
 import 'package:flutter_app_hotel_management/data/models/user_model.dart';
 import 'package:flutter_app_hotel_management/utils/config.dart';
 import 'package:flutter_app_hotel_management/utils/enum_help.dart';
-import 'package:flutter_app_hotel_management/presentation/views/auth/login_view.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
-  const RegisterPage({Key? key});
+  const RegisterScreen({Key? key});
 
   @override
   // ignore: library_private_types_in_public_api
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
 
       // ignore: avoid_print
