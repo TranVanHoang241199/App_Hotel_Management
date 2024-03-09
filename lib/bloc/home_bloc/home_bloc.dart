@@ -1,5 +1,5 @@
 import 'package:flutter_app_hotel_management/data/models/room_model.dart';
-import 'package:flutter_app_hotel_management/data/repositories/room_repositories.dart';
+import 'package:flutter_app_hotel_management/data/repositorys/room_repository.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
 
 class HomeBloC {
@@ -15,3 +15,4 @@ class HomeBloC {
     return await RoomRepository.getAllRooms(search, currentPage, _pageSize);
   }
 }
+

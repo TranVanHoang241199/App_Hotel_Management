@@ -4,21 +4,19 @@ import 'package:flutter_app_hotel_management/routes/api_routes.dart';
 import 'package:flutter_app_hotel_management/utils/api_response.dart';
 import 'package:http/http.dart' as http;
 
-class AuthRepositories {
+class AuthRepository {
   static const Map<String, String> _headers = {
     "Content-Type": "application/json",
   };
 
-  static Future<ApiResponseAuth> loginUser(
-      String username, String password) async {
+  Future<ApiResponseAuth> loginUser(String username, String password) async {
     final Map<String, String> data = {
       "userName": username,
       "password": password,
     };
-
     try {
       final response = await http.post(
-        Uri.parse(ApiRoutes.apiUrl_auth_login),
+        Uri.parse(ApiRoutes.apiUrl_auth_login), // link api
         headers: _headers,
         body: jsonEncode(data),
       );
@@ -38,7 +36,7 @@ class AuthRepositories {
     }
   }
 
-  static Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
+  Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
     try {
       final response = await http.post(
         Uri.parse(ApiRoutes.apiUrl_auth_register),
@@ -65,4 +63,31 @@ class AuthRepositories {
       );
     }
   }
+
+  // static Future<ApiResponse<Int>> checkUsername(String username) async {
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse('${ApiRoutes.apiUrl_auth_getUsername}?usename=$username'),
+  //       headers: _headers,
+  //     );
+
+  //     final responseData = jsonDecode(response.body);
+
+  //     return response.statusCode == 200
+  //         ? ApiResponse<Int>(
+  //             status: 200,
+  //             data: responseData['data'],
+  //             message: "Success",
+  //           )
+  //         : ApiResponse<Int>(
+  //             status: response.statusCode,
+  //             message: responseData['message'],
+  //           );
+  //   } catch (error) {
+  //     return ApiResponse<Int>(
+  //       status: 500,
+  //       message: 'Error occurred while processing the request.',
+  //     );
+  //   }
+  // }
 }

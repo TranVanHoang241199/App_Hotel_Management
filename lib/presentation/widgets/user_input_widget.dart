@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
+
+import '../../bloc/auth_bloc/auth_bloc.dart';
 
 class UserTextFieldWidgets extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final LoginBloC loginBloC;
+  final LoginBlocCheck loginBlocCheck;
 
   const UserTextFieldWidgets({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
-    required this.loginBloC,
-  }) : super(key: key);
+    required this.loginBlocCheck,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: StreamBuilder<String>(
-        stream: loginBloC.usernameStream,
+        stream: loginBlocCheck.usernameStream,
         builder: (context, snapshot) {
           return TextFormField(
             controller: controller,
             obscureText: false,
             validator: (value) => snapshot.data,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.person),
+              prefixIcon: const Icon(Icons.person),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.grey.shade400,

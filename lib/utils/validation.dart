@@ -4,12 +4,16 @@ class Validation {
     String emailPattern = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
 
     if (email == null || !RegExp(emailPattern).hasMatch(email)) {
-      return 'Email invalid';
+      return 'vui long nhap theo dinh dang _@_._';
     }
     return '';
   }
 
   static String validateUsername(String username) {
+    // if (AuthRepository.checkUsername(username) == 1) {
+    //   return 'tai khoan da ton tai';
+    // }
+
     if (username.length < 4 || username.length > 50) {
       return 'Nằm trong khoản 4 đến 50 ký tự';
     }
@@ -31,6 +35,20 @@ class Validation {
         !RegExp('[0-9]').hasMatch(password) ||
         !RegExp('[^a-zA-Z0-9]').hasMatch(password)) {
       return 'Mật khẩu phải chưa ký tự in hoa, thương, số và ký tự đặt biệt';
+    }
+    return '';
+  }
+
+  static String validateFullName(String fullName) {
+    if (fullName.length > 100) {
+      return 'Ten khong duoc lon hon 100 ky tu';
+    }
+    return '';
+  }
+
+  static String validatePhone(String phone) {
+    if (!RegExp('[0-9]').hasMatch(phone)) {
+      return 'vui long nhap so dien thoai';
     }
     return '';
   }
