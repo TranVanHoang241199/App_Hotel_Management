@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/data/models/service_model.dart';
 import 'package:flutter_app_hotel_management/utils/enum_help.dart';
 
-class ServiceHomeScreen extends StatefulWidget {
-  const ServiceHomeScreen({super.key});
+class ServiceHomeView extends StatefulWidget {
+  const ServiceHomeView({super.key});
 
   @override
-  State<ServiceHomeScreen> createState() => _MyWidgetState();
+  State<ServiceHomeView> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<ServiceHomeScreen> {
+class _MyWidgetState extends State<ServiceHomeView> {
   List<ServiceModel> services = [];
   late GlobalKey<RefreshIndicatorState> _refreshKey;
 

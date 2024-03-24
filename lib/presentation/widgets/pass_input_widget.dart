@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/bloc/login_bloc/login_bloc.dart';
 
 class PassTextFieldWidgets extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
-  final LoginBloC loginBloC;
+  final Stream<String> stream;
 
   const PassTextFieldWidgets({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
-    required this.loginBloC,
-  }) : super(key: key);
+    required this.stream,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -26,7 +25,7 @@ class _PassTextFieldWidgetsState extends State<PassTextFieldWidgets> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: StreamBuilder<String>(
-        stream: widget.loginBloC.passStream,
+        stream: widget.stream,
         builder: (context, snapshot) {
           return TextFormField(
             controller: widget.controller,

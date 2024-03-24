@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/data/models/customer_model.dart';
 
-class CustomerHomeScreen extends StatefulWidget {
-  const CustomerHomeScreen({Key? key}) : super(key: key);
+class CustomerHomeView extends StatefulWidget {
+  const CustomerHomeView({Key? key}) : super(key: key);
 
   @override
-  State<CustomerHomeScreen> createState() => _CustomerHomeScreenState();
+  State<CustomerHomeView> createState() => _CustomerHomeScreenState();
 }
 
-class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+class _CustomerHomeScreenState extends State<CustomerHomeView> {
   List<CustomerModel> customers = [];
 
   @override

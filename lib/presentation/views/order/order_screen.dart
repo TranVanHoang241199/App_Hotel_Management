@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class OrderView extends StatefulWidget {
-  const OrderView({super.key});
+class OrderScreen extends StatefulWidget {
+  const OrderScreen({super.key});
 
   @override
-  State<OrderView> createState() => _OrderViewState();
+  State<OrderScreen> createState() => _OrderViewState();
 }
 
-class _OrderViewState extends State<OrderView> {
+class _OrderViewState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

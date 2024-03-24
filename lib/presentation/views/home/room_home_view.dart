@@ -3,14 +3,14 @@ import 'package:flutter_app_hotel_management/bloc/home_bloc/home_bloc.dart';
 import 'package:flutter_app_hotel_management/utils/helps/help_widgets.dart';
 import 'package:flutter_app_hotel_management/presentation/widgets/room_item_widget.dart';
 
-class RoomHomeScreen extends StatefulWidget {
-  const RoomHomeScreen({Key? key}) : super(key: key);
+class RoomHomeView extends StatefulWidget {
+  const RoomHomeView({Key? key}) : super(key: key);
 
   @override
   _RoomHomeScreenState createState() => _RoomHomeScreenState();
 }
 
-class _RoomHomeScreenState extends State<RoomHomeScreen> {
+class _RoomHomeScreenState extends State<RoomHomeView> {
   late HomeBloC _homeBloC;
   late GlobalKey<RefreshIndicatorState> _refreshKey;
   late ScrollController _scrollController;

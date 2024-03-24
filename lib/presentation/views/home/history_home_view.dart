@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class HistoryHomeScreen extends StatefulWidget {
-  const HistoryHomeScreen({Key? key}) : super(key: key);
+class HistoryHomeView extends StatefulWidget {
+  const HistoryHomeView({Key? key}) : super(key: key);
 
   @override
-  State<HistoryHomeScreen> createState() => _HistoryHomeScreenState();
+  State<HistoryHomeView> createState() => _HistoryHomeScreenState();
 }
 
-class _HistoryHomeScreenState extends State<HistoryHomeScreen> {
+class _HistoryHomeScreenState extends State<HistoryHomeView> {
   late DateTime _selectedDay;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   Map<DateTime, List<HistoryModel>> _events = {};

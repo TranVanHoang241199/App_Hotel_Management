@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class StatisticalPage extends StatefulWidget {
-  const StatisticalPage({Key? key}) : super(key: key);
+class StatisticalScreen extends StatefulWidget {
+  const StatisticalScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatisticalPage> createState() => _StatisticalPageState();
+  State<StatisticalScreen> createState() => _StatisticalPageState();
 }
 
-class _StatisticalPageState extends State<StatisticalPage> {
+class _StatisticalPageState extends State<StatisticalScreen> {
   bool _showRevenue = true;
 
   @override
