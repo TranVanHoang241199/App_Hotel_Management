@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../bloc/auth_bloc/auth_bloc.dart';
-
 class UserTextFieldWidgets extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  final LoginBlocCheck loginBlocCheck;
+  final Stream<String> stream;
 
   const UserTextFieldWidgets({
     super.key,
     required this.controller,
     required this.hintText,
-    required this.loginBlocCheck,
+    required this.stream,
   });
 
   @override
@@ -19,7 +17,7 @@ class UserTextFieldWidgets extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: StreamBuilder<String>(
-        stream: loginBlocCheck.usernameStream,
+        stream: stream,
         builder: (context, snapshot) {
           return TextFormField(
             controller: controller,

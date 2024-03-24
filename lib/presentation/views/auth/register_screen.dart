@@ -5,6 +5,7 @@ import 'package:flutter_app_hotel_management/presentation/widgets/input_widget.d
 import 'package:flutter_app_hotel_management/data/models/user_model.dart';
 import 'package:flutter_app_hotel_management/utils/utils.dart';
 import '../../../bloc/auth_bloc/auth.dart';
+import '../../widgets/btn_register_widget.dart';
 import '../../widgets/pass_input_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -47,16 +48,7 @@ class _RegisterPageState extends State<RegisterScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    model = UserModel(
-      userName: usernameController.text,
-      password: passwordController.text,
-      fullName: fullNameController.text,
-      phone: phoneController.text,
-      email: emailController.text,
-      businessAreas: 0,
-      isDeleted: isDeleted,
-      role: selectedRole,
-    );
+
     registerBlocCheck = RegisterBlocCheck();
     authBloc = BlocProvider.of<AuthBloc>(context);
 
@@ -175,11 +167,22 @@ class _RegisterPageState extends State<RegisterScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
+                  btn_registerWidgets(
+                    registerBlocCheck: registerBlocCheck,
+                    onTap: () {
+                      model = UserModel(
+                        userName: usernameController.text,
+                        password: passwordController.text,
+                        fullName: fullNameController.text,
+                        phone: phoneController.text,
+                        email: emailController.text,
+                        businessAreas: 0,
+                        isDeleted: isDeleted,
+                        role: selectedRole,
+                      );
                       authBloc.add(RegisterButtonPressed(user: model));
                     },
-                    child: const Text('Register'),
+                    txtName: "Register",
                   ),
                 ],
               ),

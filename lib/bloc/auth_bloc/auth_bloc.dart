@@ -6,116 +6,205 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/user_model.dart';
 import '../../data/repositorys/auth_repository.dart';
-import '../../utils/validation.dart';
+import '../../utils/utils.dart';
 import '../auth_bloc/auth.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthRepository repo;
+  final AuthRepository _repo;
 
-  AuthBloc(AuthState initialState, this.repo) : super(LoginInitState()) {
-    on<LoginButtonPressed>((event, emit) async {
-      await loginPressed(event.username, event.password, emit);
-    });
-
-    on<RegisterButtonPressed>(
-      (event, emit) async {
-        await registerPressed(event.user, emit);
-      },
-    );
-  }
-
-  Future<void> loginPressed(
-      String username, String password, Emitter<AuthState> emit) async {
-    emit(LoginLoadingState());
-
-    try {
-      if (username.isEmpty || password.isEmpty) {
-        emit(const LoginErrorState(
-            message: 'Username and password cannot be empty'));
-        return;
-      }
-
-      final token = await repo.loginUser(username, password);
-
-      if (token.accessToken != null) {
-        emit(LoginSuccessState(token: token.accessToken!));
-
-        // Set token in SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('accessToken', token.accessToken.toString());
-      } else {
-        emit(const LoginErrorState(message: 'Access token is null'));
-      }
-    } catch (e) {
-      emit(const LoginErrorState(message: 'Failed to login'));
-    }
-  }
-
-  Future<void> registerPressed(UserModel user, Emitter<AuthState> emit) async {
-    emit(RegisterLoadingState());
-    try {
-      final data = await repo.registerUser(user);
-
-      if (data.data != null) {
-        emit(RegisterSuccessState(user: data.data!));
-      } else {
-        emit(const RegisterErrorState(message: 'Failed to register'));
-      }
-    } catch (e) {
-      emit(const RegisterErrorState(message: 'Failed to register'));
-    }
-  }
-
-  Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    // Bạn có thể sử dụng mapEventToState để xử lý các sự kiện khác nếu cần
-    if (event is StartEvent) {
-      yield LoginInitState();
-    }
-  }
-}
-
-/**
- * LoginCheck
- */
-class LoginBlocCheck {
-  final _usernameSubject = BehaviorSubject<String>();
-  final _passSubject = BehaviorSubject<String>();
+  final _loginUsernameSubject = BehaviorSubject<String>();
+  final _loginpassSubject = BehaviorSubject<String>();
   final _btnLoginSubject = BehaviorSubject<bool>();
 
-  var usernameValidation = StreamTransformer<String, String>.fromHandlers(
+  final _registerUsernameSubject = BehaviorSubject<String>();
+  final _registerPassSubject = BehaviorSubject<String>();
+  final _registerFullNameSubject = BehaviorSubject<String>();
+  final _registerPhoneSubject = BehaviorSubject<String>();
+  final _registerEmailSubject = BehaviorSubject<String>();
+  final _btnRegisterSubject = BehaviorSubject<bool>();
+
+  AuthBloc(AuthState initialState, this._repo) : super(AuthInitState()) {
+    // login check
+    Rx.combineLatest2(_loginUsernameSubject, _loginpassSubject,
+        (username, pass) {
+      return username.isNotEmpty &&
+          pass.isNotEmpty &&
+          Validation.validateUsername(username) == '' &&
+          Validation.validatePassword(pass) == '';
+    }).listen((enable) {
+      _btnLoginSubject.add(enable);
+    });
+
+    // re check
+    Rx.combineLatest5(
+      _registerUsernameSubject,
+      _registerPassSubject,
+      _registerFullNameSubject,
+      _registerPhoneSubject,
+      _registerEmailSubject,
+      (username, pass, fname, phone, email) {
+        return username.isNotEmpty &&
+            pass.isNotEmpty &&
+            fname.isNotEmpty &&
+            phone.isNotEmpty &&
+            email.isNotEmpty;
+      },
+    ).listen((enable) {
+      _btnRegisterSubject.add(enable);
+    });
+  }
+
+  @override
+  Stream<AuthState> mapEventToState(AuthEvent event) async* {
+    print(" vaof map-----------");
+    if (event is StartEvent) {
+      yield AuthInitState();
+    } else if (event is LoginButtonPressed) {
+      print(" vaof map-----------" + event.username + "/" + event.password);
+
+      yield* _mapLoginButtonPressedToState(event);
+    } else if (event is RegisterButtonPressed) {
+      yield* _mapRegisterButtonPressedToState(event);
+    }
+  }
+
+  Stream<AuthState> _mapLoginButtonPressedToState(
+      LoginButtonPressed event) async* {
+    yield LoginLoadingState();
+    try {
+      print(" vaof maploin-----------" + event.username + "/" + event.password);
+      // Call loginPressed method from repository
+      final token = await _repo.loginUser(event.username, event.password);
+      print(" vaof maploin-----------" + token.message.toString());
+      // Lưu token vào SharedPreferences
+      await _saveToken(token.accessToken.toString());
+      if (token.status == 200) {
+        yield LoginSuccessState(token: token.accessToken.toString());
+      }
+      yield LoginErrorState(
+          message: 'Failed to login' + token.message.toString());
+    } catch (e) {
+      yield LoginErrorState(message: 'Failed to login');
+    }
+  }
+
+  Stream<AuthState> _mapRegisterButtonPressedToState(
+      RegisterButtonPressed event) async* {
+    yield RegisterLoadingState();
+    try {
+      // Call registerUser method from repository
+      final ApiResponse<UserModel> response =
+          await _repo.registerUser(event.user);
+
+      if (response.data != null) {
+        yield RegisterSuccessState(user: response.data!);
+      } else {
+        yield RegisterErrorState(
+            message: response.message ?? 'Failed to register');
+      }
+    } catch (e) {
+      yield RegisterErrorState(message: 'Failed to register');
+    }
+  }
+
+  // Phương thức để lưu token vào SharedPreferences
+  Future<void> _saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('accessToken', token);
+  }
+
+  var loginUsernameValidation = StreamTransformer<String, String>.fromHandlers(
       handleData: (username, sink) {
     sink.add(Validation.validateUsername(username));
   });
 
-  var passValidation =
+  var loginPassValidation =
       StreamTransformer<String, String>.fromHandlers(handleData: (pass, sink) {
     sink.add(Validation.validatePassword(pass));
   });
 
-  Stream<String> get usernameStream =>
-      _usernameSubject.stream.transform(usernameValidation);
-  Sink<String> get usernameSink => _usernameSubject.sink;
+  //---------------------------------
+  var registerUsernameValidation =
+      StreamTransformer<String, String>.fromHandlers(
+          handleData: (username, sink) {
+    sink.add(Validation.validateUsername(username));
+  });
 
-  Stream<String> get passStream =>
-      _passSubject.stream.transform(passValidation);
-  Sink<String> get passSink => _passSubject.sink;
+  var registerPassValidation =
+      StreamTransformer<String, String>.fromHandlers(handleData: (pass, sink) {
+    sink.add(Validation.validatePassword(pass));
+  });
+
+  var registerFullNameValidation =
+      StreamTransformer<String, String>.fromHandlers(
+          handleData: (fullName, sink) {
+    sink.add(Validation.validateFullName(fullName));
+  });
+
+  var registerPhoneValidation =
+      StreamTransformer<String, String>.fromHandlers(handleData: (phone, sink) {
+    sink.add(Validation.validatePhone(phone));
+  });
+
+  var registerEmailValidation =
+      StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
+    sink.add(Validation.validateEmail(email));
+  });
+
+  /**
+ * LoginCheck
+ */
+  // Getters and setters for username, password, and btnLogin
+  Stream<String> get loginUsernameStream =>
+      _loginUsernameSubject.stream.transform(loginUsernameValidation);
+  Sink<String> get loginUsernameSink => _loginUsernameSubject.sink;
+
+  Stream<String> get loginPassStream =>
+      _loginpassSubject.stream.transform(loginPassValidation);
+  Sink<String> get loginPassSink => _loginpassSubject.sink;
 
   Stream<bool> get btnLoginStream => _btnLoginSubject.stream;
   Sink<bool> get btnLoginSink => _btnLoginSubject.sink;
 
-  LoginBlocCheck() {
-    Rx.combineLatest2(_usernameSubject, _passSubject, (username, pass) {
-      return Validation.validateUsername(username) == '' &&
-          Validation.validatePassword(pass) == '';
-    }).listen((enable) {
-      btnLoginSink.add(enable);
-    });
-  }
+  // Getters and setters for username, password, fullname, phone, email, and btnRegister
+  Stream<String> get registerUsernameStream =>
+      _registerUsernameSubject.stream.transform(registerUsernameValidation);
+  Sink<String> get registerUsernameSink => _registerUsernameSubject.sink;
 
-  void dispose() {
-    _usernameSubject.close();
-    _passSubject.close();
+  Stream<String> get registerPassStream =>
+      _registerPassSubject.stream.transform(registerPassValidation);
+  Sink<String> get registerPassSink => _registerPassSubject.sink;
+
+  Stream<String> get registerFullNameStream =>
+      _registerFullNameSubject.stream.transform(registerFullNameValidation);
+  Sink<String> get registerFullNameSink => _registerFullNameSubject.sink;
+
+  Stream<String> get registerPhoneStream =>
+      _registerPhoneSubject.stream.transform(registerPhoneValidation);
+  Sink<String> get registerPhoneSink => _registerPhoneSubject.sink;
+
+  Stream<String> get registerEmailStream =>
+      _registerEmailSubject.stream.transform(registerEmailValidation);
+  Sink<String> get registerEmailSink => _registerEmailSubject.sink;
+
+  Stream<bool> get btnRegisterStream => _btnRegisterSubject.stream;
+  Sink<bool> get btnRegisterSink => _btnRegisterSubject.sink;
+
+  @override
+  Future<void> close() {
+    // login
+    _loginUsernameSubject.close();
+    _loginpassSubject.close();
     _btnLoginSubject.close();
+    //register
+    _registerUsernameSubject.close();
+    _registerPassSubject.close();
+    _registerFullNameSubject.close();
+    _registerPhoneSubject.close();
+    _registerEmailSubject.close();
+    _btnLoginSubject.close();
+    _btnRegisterSubject.close();
+    return super.close();
   }
 }
 
@@ -188,9 +277,9 @@ class RegisterBlocCheck {
       (username, pass, fname, phone, email) {
         return Validation.validateUsername(username) == '' &&
             Validation.validatePassword(pass) == '' &&
-            Validation.validatePassword(fname) == '' &&
-            Validation.validatePassword(phone) == '' &&
-            Validation.validatePassword(email) == '';
+            Validation.validateFullName(fname) == '' &&
+            Validation.validatePhone(phone) == '' &&
+            Validation.validateEmail(email) == '';
       },
     ).listen((enable) {
       btnRegisterSink.add(enable);

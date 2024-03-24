@@ -10,11 +10,12 @@ class HomeState extends Equatable {
 
 class HomeInitState extends HomeState {}
 
+// Home - Room
 class HomeRoomLoadingState extends HomeState {}
 
 class HomeRoomSuccessState extends HomeState {
-  final RoomModel room;
-  const HomeRoomSuccessState(this.room);
+  final List<RoomModel> listRoom;
+  const HomeRoomSuccessState(this.listRoom);
 }
 
 class HomeRoomErrorState extends HomeState {

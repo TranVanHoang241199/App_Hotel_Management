@@ -1,3 +1,5 @@
+import 'dart:async';
+
 class Validation {
   static String validateEmail(String email) {
     // Biểu thức chính quy kiểm tra định dạng email

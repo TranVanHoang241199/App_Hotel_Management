@@ -22,6 +22,7 @@ class AuthRepository {
       );
 
       final responseData = jsonDecode(response.body);
+      print(" vaof api-----------" + response.statusCode.toString());
       if (response.statusCode == 200) {
         return ApiResponseAuth.fromJson(responseData);
       } else {
@@ -36,7 +37,7 @@ class AuthRepository {
     }
   }
 
-  Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
+  Future<ApiResponse<UserModel>> registerUser2(UserModel model) async {
     try {
       final response = await http.post(
         Uri.parse(ApiRoutes.apiUrl_auth_register),
@@ -64,30 +65,33 @@ class AuthRepository {
     }
   }
 
-  // static Future<ApiResponse<Int>> checkUsername(String username) async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse('${ApiRoutes.apiUrl_auth_getUsername}?usename=$username'),
-  //       headers: _headers,
-  //     );
+  Future<ApiResponse<UserModel>> registerUser(UserModel model) async {
+    try {
+      final response = await http.post(
+        Uri.parse(ApiRoutes.apiUrl_auth_register),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(model.toJson()),
+      );
 
-  //     final responseData = jsonDecode(response.body);
+      final responseData = jsonDecode(response.body);
 
-  //     return response.statusCode == 200
-  //         ? ApiResponse<Int>(
-  //             status: 200,
-  //             data: responseData['data'],
-  //             message: "Success",
-  //           )
-  //         : ApiResponse<Int>(
-  //             status: response.statusCode,
-  //             message: responseData['message'],
-  //           );
-  //   } catch (error) {
-  //     return ApiResponse<Int>(
-  //       status: 500,
-  //       message: 'Error occurred while processing the request.',
-  //     );
-  //   }
-  // }
+      if (response.statusCode == 200) {
+        return ApiResponse<UserModel>(
+          status: response.statusCode,
+          data: UserModel.fromJson(responseData),
+          message: "Success",
+        );
+      } else {
+        return ApiResponse<UserModel>(
+          status: response.statusCode,
+          message: responseData['message'],
+        );
+      }
+    } catch (error) {
+      return ApiResponse<UserModel>(
+        status: 500,
+        message: 'Error occurred while processing the request.',
+      );
+    }
+  }
 }

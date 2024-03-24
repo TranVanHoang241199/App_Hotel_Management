@@ -19,7 +19,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   static final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => AuthBloc(LoginInitState(), AuthRepository()))
+            create: (context) => AuthBloc(AuthInitState(), AuthRepository()))
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
