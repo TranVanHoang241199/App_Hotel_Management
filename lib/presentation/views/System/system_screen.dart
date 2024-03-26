@@ -183,11 +183,3 @@ class SecondPage extends StatelessWidget {
     );
   }
 }
-
-// void main() {
-//   runApp(
-//     MaterialApp(
-//       home: SystemScreen(),
-//     ),
-//   );
-// }

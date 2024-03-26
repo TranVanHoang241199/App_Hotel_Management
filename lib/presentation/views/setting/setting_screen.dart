@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});

@@ -3,24 +3,44 @@ import 'package:flutter_app_hotel_management/utils/enum_help.dart';
 class ServiceModel {
   String? img;
   String? serviceName;
-  double price;
+  double priceAmount;
   int quantity;
-  EStatusService status;
+  int status;
+  String? categoryServiceId;
+  DateTime? createdDate;
+  String createdBy;
+  DateTime? modifiedDate;
+  String? modifiedBy;
 
   ServiceModel({
     this.img,
     this.serviceName,
-    required this.price,
+    required this.priceAmount,
     required this.quantity,
     required this.status,
+    this.categoryServiceId,
+    this.createdDate,
+    required this.createdBy,
+    this.modifiedDate,
+    this.modifiedBy,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {
     return ServiceModel(
-      serviceName: json['ServiceName'],
-      price: json['Price'].toDouble(),
-      quantity: json['Quantity'],
-      status: _parseStatus(json['Status']),
+      img: json['img'],
+      serviceName: json['serviceName'],
+      priceAmount: json['priceAmount'].toDouble(),
+      quantity: json['quantity'],
+      status: json['status'],
+      categoryServiceId: json['categoryServiceId'],
+      createdDate: json['createdDate'] != null
+          ? DateTime.parse(json['createdDate'])
+          : null,
+      createdBy: json['createdBy'],
+      modifiedDate: json['modifiedDate'] != null
+          ? DateTime.parse(json['modifiedDate'])
+          : null,
+      modifiedBy: json['modifiedBy'],
     );
   }
 

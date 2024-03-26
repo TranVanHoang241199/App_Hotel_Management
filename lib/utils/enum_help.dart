@@ -4,7 +4,7 @@ class EnumHelp {
   static String getDisplayRoleText(UserRole role) {
     switch (role) {
       case UserRole.admin:
-        return "Adminsss";
+        return "Adminstrator";
       case UserRole.customer:
         return "Customer";
       case UserRole.manager:
@@ -12,7 +12,7 @@ class EnumHelp {
       case UserRole.accountant:
         return "Accountant";
       case UserRole.hr:
-        return "HR";
+        return "Human Resource";
       case UserRole.employee:
         return "Employee";
       case UserRole.warehouse:

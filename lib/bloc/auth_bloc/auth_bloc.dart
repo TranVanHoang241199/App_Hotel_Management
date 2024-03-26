@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/models/user_model.dart';
 import '../../data/repositorys/auth_repository.dart';
 import '../../utils/utils.dart';
 import '../auth_bloc/auth.dart';
@@ -56,12 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    print(" vaof map-----------");
     if (event is StartEvent) {
       yield AuthInitState();
     } else if (event is LoginButtonPressed) {
-      print(" vaof map-----------" + event.username + "/" + event.password);
-
       yield* _mapLoginButtonPressedToState(event);
     } else if (event is RegisterButtonPressed) {
       yield* _mapRegisterButtonPressedToState(event);
@@ -72,19 +68,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LoginButtonPressed event) async* {
     yield LoginLoadingState();
     try {
-      print(" vaof maploin-----------" + event.username + "/" + event.password);
+      print("bloc login----------------" + event.password + event.username);
       // Call loginPressed method from repository
-      final token = await _repo.loginUser(event.username, event.password);
-      print(" vaof maploin-----------" + token.message.toString());
+      final response = await _repo.loginUser(event.username, event.password);
+      print("bloc login2----------------" + event.password + event.username);
       // Lưu token vào SharedPreferences
-      await _saveToken(token.accessToken.toString());
-      if (token.status == 200) {
-        yield LoginSuccessState(token: token.accessToken.toString());
+      await _saveToken(response.accessToken.toString());
+      if (response.status == 200) {
+        yield LoginSuccessState(token: response.accessToken.toString());
       }
       yield LoginErrorState(
-          message: 'Failed to login' + token.message.toString());
+          message: 'Failed to login' + response.message.toString());
     } catch (e) {
-      yield LoginErrorState(message: 'Failed to login');
+      yield const LoginErrorState(message: 'Failed to login');
     }
   }
 
@@ -93,17 +89,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     yield RegisterLoadingState();
     try {
       // Call registerUser method from repository
-      final ApiResponse<UserModel> response =
-          await _repo.registerUser(event.user);
+      final response = await _repo.registerUser(event.user);
 
-      if (response.data != null) {
+      if (response.status == 200) {
         yield RegisterSuccessState(user: response.data!);
       } else {
         yield RegisterErrorState(
             message: response.message ?? 'Failed to register');
       }
     } catch (e) {
-      yield RegisterErrorState(message: 'Failed to register');
+      yield const RegisterErrorState(message: 'Failed to register');
     }
   }
 
@@ -205,93 +200,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _btnLoginSubject.close();
     _btnRegisterSubject.close();
     return super.close();
-  }
-}
-
-/**
- * sdfsdfsd
- */
-class RegisterBlocCheck {
-  final _usernameSubject = BehaviorSubject<String>();
-  final _passSubject = BehaviorSubject<String>();
-  final _fullNameSubject = BehaviorSubject<String>();
-  final _phoneSubject = BehaviorSubject<String>();
-  final _emailSubject = BehaviorSubject<String>();
-  final _btnRegisterSubject = BehaviorSubject<bool>();
-
-  var usernameValidation = StreamTransformer<String, String>.fromHandlers(
-      handleData: (username, sink) {
-    sink.add(Validation.validateUsername(username));
-  });
-
-  var passValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (pass, sink) {
-    sink.add(Validation.validatePassword(pass));
-  });
-
-  var fullNameValidation = StreamTransformer<String, String>.fromHandlers(
-      handleData: (fullName, sink) {
-    sink.add(Validation.validateFullName(fullName));
-  });
-
-  var phoneValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (phone, sink) {
-    sink.add(Validation.validatePhone(phone));
-  });
-
-  var emailValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
-    sink.add(Validation.validateEmail(email));
-  });
-
-  Stream<String> get usernameStream =>
-      _usernameSubject.stream.transform(usernameValidation);
-  Sink<String> get usernameSink => _usernameSubject.sink;
-
-  Stream<String> get passStream =>
-      _passSubject.stream.transform(passValidation);
-  Sink<String> get passSink => _passSubject.sink;
-
-  Stream<String> get fullNameStream =>
-      _fullNameSubject.stream.transform(fullNameValidation);
-  Sink<String> get fullNameSink => _fullNameSubject.sink;
-
-  Stream<String> get phoneStream =>
-      _phoneSubject.stream.transform(phoneValidation);
-  Sink<String> get phoneSink => _phoneSubject.sink;
-
-  Stream<String> get emailStream =>
-      _emailSubject.stream.transform(emailValidation);
-  Sink<String> get emailSink => _emailSubject.sink;
-
-  Stream<bool> get btnRegisterStream => _btnRegisterSubject.stream;
-  Sink<bool> get btnRegisterSink => _btnRegisterSubject.sink;
-
-  RegisterBlocCheck() {
-    Rx.combineLatest5(
-      _usernameSubject,
-      _passSubject,
-      _fullNameSubject,
-      _phoneSubject,
-      _emailSubject,
-      (username, pass, fname, phone, email) {
-        return Validation.validateUsername(username) == '' &&
-            Validation.validatePassword(pass) == '' &&
-            Validation.validateFullName(fname) == '' &&
-            Validation.validatePhone(phone) == '' &&
-            Validation.validateEmail(email) == '';
-      },
-    ).listen((enable) {
-      btnRegisterSink.add(enable);
-    });
-  }
-
-  void dispose() {
-    _usernameSubject.close();
-    _passSubject.close();
-    _fullNameSubject.close();
-    _phoneSubject.close();
-    _emailSubject.close();
-    _btnRegisterSubject.close();
   }
 }

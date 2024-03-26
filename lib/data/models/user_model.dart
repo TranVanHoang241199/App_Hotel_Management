@@ -10,9 +10,6 @@ class UserModel {
   int? businessAreas;
   bool? isDeleted;
   String? role;
-  String? createDate;
-  DateTime? passwordUpdatedDate;
-  DateTime? deletedDate;
 
   UserModel({
     this.id,
@@ -23,11 +20,8 @@ class UserModel {
     this.phone,
     this.businessAreas,
     this.isDeleted,
-    required UserRole role,
-    this.createDate,
-    this.passwordUpdatedDate,
-    this.deletedDate,
-  }) : role = EnumHelp.getDisplayRoleText(role);
+    this.role,
+  });
 
   // Factory constructor để tạo một đối tượng UserModel từ một đối tượng Map
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,9 +35,6 @@ class UserModel {
       businessAreas: json['businessAreas'],
       isDeleted: json['isDeleted'],
       role: json['role'],
-      createDate: json['createDate'],
-      passwordUpdatedDate: json['passwordUpdatedDate'],
-      deletedDate: json['deletedDate'],
     );
   }
 
@@ -59,9 +50,6 @@ class UserModel {
       'businessAreas': businessAreas,
       'isDeleted': isDeleted,
       'role': role,
-      'createDate': createDate,
-      'passwordUpdatedDate': passwordUpdatedDate,
-      'deletedDate': deletedDate,
     };
   }
 }

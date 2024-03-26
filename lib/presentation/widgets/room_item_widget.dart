@@ -50,7 +50,7 @@ class RoomItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("tang ${room.floorNumber}"),
-                        Text(room.price.toString(),
+                        Text(room.priceAmount.toString(),
                             style: TextStyle(fontSize: 10.0)),
                       ],
                     ),
@@ -66,7 +66,7 @@ class RoomItemWidget extends StatelessWidget {
                 height: 20.0,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: getStatusColor(room.status),
+                  color: getStatusColor(room.status ?? 0),
                 ),
               ),
             ),

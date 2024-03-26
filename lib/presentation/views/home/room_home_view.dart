@@ -1,223 +1,183 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/bloc/home_bloc/home_bloc.dart';
-import 'package:flutter_app_hotel_management/utils/helps/help_widgets.dart';
-import 'package:flutter_app_hotel_management/presentation/widgets/room_item_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RoomHomeView extends StatefulWidget {
+import '../../../bloc/home_bloc/home.dart';
+import '../../../data/models/room_model.dart';
+import '../../components/menu_drawer.dart';
+
+class RoomHomeView extends StatelessWidget {
   const RoomHomeView({Key? key}) : super(key: key);
 
   @override
-  _RoomHomeScreenState createState() => _RoomHomeScreenState();
+  Widget build(BuildContext context) {
+    BlocProvider.of<HomeBloc>(context).add(HomeRoomStartEvent());
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Phòng"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: RoomSearchDelegate());
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () {
+              // Hiển thị dialog chọn option lọc
+              _showFilterDialog(context);
+            },
+          ),
+        ],
+        automaticallyImplyLeading: true,
+      ),
+      drawer: const MenuDrawer(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          // Gửi sự kiện HomeStartEvent để load lại dữ liệu
+          BlocProvider.of<HomeBloc>(context).add(HomeRoomStartEvent());
+        },
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is HomeRoomLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is HomeRoomSuccessState) {
+              // Hiển thị danh sách phòng dưới dạng GridView
+              return _buildListRoom(state);
+            } else if (state is HomeRoomErrorState) {
+              return Center(
+                child: Text('Error: ${state.message}'),
+              );
+            } else if (state is HomeRoomNoDataState) {
+              return Center(
+                child: Text(state.message),
+              );
+            } else {
+              return Center(
+                child: Text("Looix khong load dc."),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListRoom(state) {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Số cột là 2
+          crossAxisSpacing: 10.0, // Khoảng cách giữa các cột
+          mainAxisSpacing: 10.0, // Khoảng cách giữa các hàng
+        ),
+        itemCount: state.listRoom.length,
+        itemBuilder: (context, index) {
+          final room = state.listRoom[index];
+          return _buildRoomItem(room);
+        },
+      ),
+    );
+  }
+
+  Widget _buildRoomItem(RoomModel room) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey), // Đường viền xám
+        borderRadius: BorderRadius.circular(10.0), // Góc bo tròn
+        color: _getStatusColor(room.status), // Màu nền của RoomItem
+      ),
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(room.roomName),
+          Text(room.priceAmount.toString()),
+        ],
+      ),
+    );
+  }
+
+  Color _getStatusColor(int param) {
+    switch (param) {
+      case 0:
+        return Colors.green.withOpacity(0.7);
+      case 1:
+        return Colors.yellow.withOpacity(0.7);
+      case 2:
+        return Colors.red.withOpacity(0.7);
+      case 3:
+        return Colors.white.withOpacity(0.7);
+      default:
+        return Colors.black.withOpacity(0.7);
+    }
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Filter Options'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Add your filter options here...'),
+                // You can add various filter options here
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+            // Add more buttons for filter actions if needed
+          ],
+        );
+      },
+    );
+  }
 }
 
-class _RoomHomeScreenState extends State<RoomHomeView> {
-  late HomeBloC _homeBloC;
-  late GlobalKey<RefreshIndicatorState> _refreshKey;
-  late ScrollController _scrollController;
-
+class RoomSearchDelegate extends SearchDelegate<String> {
   @override
-  void initState() {
-    super.initState();
-    _homeBloC = HomeBloC();
-    _homeBloC.selectedItems = [];
-    _homeBloC.roomData = [];
-    _homeBloC.search = '';
-    _homeBloC.currentPage = 1;
-    _refreshKey = GlobalKey<RefreshIndicatorState>();
-    _scrollController = ScrollController();
-    fetchData();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  Future<void> fetchData() async {
-    try {
-      final response =
-          await _homeBloC.getAllRooms(_homeBloC.search, _homeBloC.currentPage);
-
-      if (response.status == 200) {
-        setState(() {
-          _homeBloC.roomData = response.data ?? [];
-          _homeBloC.selectedItems =
-              List.generate(_homeBloC.roomData.length, (index) => false);
-        });
-      } else {
-        HelpWidgets.showErrorDialog(
-          context,
-          'Error: ${response.message}',
-          onRetry: fetchData,
-        );
-      }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
-
-  /**
-   * Load them trang
-   */
-  Future<void> _loadMoreData() async {
-    try {
-      final response = await _homeBloC.getAllRooms(
-          _homeBloC.search, _homeBloC.currentPage + 1);
-
-      if (response.status == 200) {
-        setState(() {
-          _homeBloC.roomData.addAll(response.data ?? []);
-          _homeBloC.selectedItems.addAll(
-            List.generate(response.data!.length, (index) => false),
-          );
-          _homeBloC.currentPage++; // Increase the page number for the next load
-        });
-      } else {
-        // ignore: use_build_context_synchronously
-        HelpWidgets.showErrorDialog(
-          context,
-          'Error: ${response.message}',
-          onRetry: _loadMoreData,
-        );
-      }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
-
-  void _scrollListener() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
-        !_scrollController.position.outOfRange) {
-      // Reached the end of the list
-      _loadMoreData(); // Load more data
-    }
-  }
-
-  void _toggleSelectedItem(int index) {
-    setState(() {
-      _homeBloC.selectedItems[index] = !_homeBloC.selectedItems[index];
-    });
-  }
-
-  void _handleItemDoubleTap(int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Thông tin chi tiết"),
-          content: const Text("Đặt phòng, mua phòng, thuê phòng"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Đóng"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _handleItemLongPress(int index, BuildContext context) {
-    final RenderBox overlay =
-        Overlay.of(context)!.context.findRenderObject() as RenderBox;
-
-    showMenu(
-      context: context,
-      position: RelativeRect.fromRect(
-        _getLongPressRect(index, overlay),
-        Offset.zero & overlay.size,
-      ),
-      items: <PopupMenuEntry>[
-        PopupMenuItem(
-          child: Text('Đặt phòng'),
-          onTap: () {
-            Navigator.pop(context); // Close the menu
-            _showDialog('Đặt phòng');
-          },
-        ),
-        PopupMenuItem(
-          child: Text('Mua phòng'),
-          onTap: () {
-            Navigator.pop(context); // Close the menu
-            _showDialog('Mua phòng');
-          },
-        ),
-        PopupMenuItem(
-          child: Text('Thuê phòng'),
-          onTap: () {
-            Navigator.pop(context); // Close the menu
-            _showDialog('Thuê phòng');
-          },
-        ),
-      ],
-    );
-  }
-
-  void _showDialog(String content) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Thông tin chi tiết"),
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Đóng"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Rect _getLongPressRect(int index, RenderBox overlay) {
-    final RenderBox itemBox = context.findRenderObject() as RenderBox;
-    final Offset itemPosition =
-        itemBox.localToGlobal(Offset.zero, ancestor: overlay);
-    const double itemWidth = 150.0; // Width of the long-press area
-    const double itemHeight = 50.0; // Height of the long-press area
-
-    return Rect.fromPoints(
-      itemPosition,
-      itemPosition.translate(itemWidth, itemHeight),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: RefreshIndicator(
-        key: _refreshKey,
-        onRefresh: () async {
-          _homeBloC.currentPage = 1;
-          await fetchData();
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
         },
-        child: _homeBloC.roomData.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3 / 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                controller: _scrollController,
-                itemCount: _homeBloC.roomData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return RoomItemWidget(
-                    room: _homeBloC.roomData[index],
-                    selected: _homeBloC.selectedItems[index],
-                    onTap: () => _toggleSelectedItem(index),
-                    onDoubleTap: () => _handleItemDoubleTap(index),
-                    onLongPress: () => _handleItemLongPress(index, context),
-                  );
-                },
-              ),
       ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Center(
+      child: Text('Search Results for: $query'),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Center(
+      child: Text('Type to Search...'),
     );
   }
 }

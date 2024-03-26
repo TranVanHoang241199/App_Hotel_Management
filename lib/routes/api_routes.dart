@@ -34,11 +34,8 @@ class ApiRoutes {
    * Room
    */
   // ignore: constant_identifier_names
-  static const String apiUrl_room_GetAllRooms = "${apiUrl_Base}api/v1/rooms";
-  // ignore: constant_identifier_names
-  static const String apiUrl_room_GetRoomById = "${apiUrl_Base}api/v1/rooms";
-  // ignore: constant_identifier_names
-  static const String apiUrl_room_CreateRoom = "${apiUrl_Base}api/v1/rooms";
-  // ignore: constant_identifier_names
-  static const String apiUrl_room_UpdateRoom = "${apiUrl_Base}api/v1/rooms";
+  static const String apiUrl_room = "${apiUrl_Base}api/v1/rooms";
+
+  static const String apiUrl_service = "${apiUrl_Base}api/v1/service";
+  static const String apiUrl_customer = "${apiUrl_Base}api/v1/customers";
 }

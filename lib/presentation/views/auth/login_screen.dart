@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_app_hotel_management/bloc/auth_bloc/auth.dart';
 
 import '../../../data/repositorys/auth_repository.dart';
+import '../../../utils/utils.dart';
 import '../../widgets/btn_login_widget.dart';
 import '../../widgets/pass_input_widget.dart';
 import '../../widgets/user_input_widget.dart';
@@ -21,7 +22,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class LoginForm extends StatelessWidget {
-  LoginForm({Key? key}) : super(key: key);
+  LoginForm({super.key});
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -85,15 +86,15 @@ class LoginForm extends StatelessWidget {
                     hintText: 'Username',
                     stream: authBloc.loginUsernameStream,
                   ),
-                  const SizedBox(height: 10),
+                  Config.spaceSmall,
                   PassTextFieldWidgets(
                     controller: passwordController,
                     hintText: 'Password',
                     stream: authBloc.loginPassStream,
                   ),
-                  const SizedBox(height: 10),
+                  Config.spaceSmall,
                   forgot,
-                  const SizedBox(height: 25),
+                  Config.spaceSmall,
                   BtnLoginWidgets(
                     txtName: "Login",
                     onTap: () {
@@ -104,6 +105,10 @@ class LoginForm extends StatelessWidget {
                     },
                     authBloc: authBloc,
                   ),
+                  Config.spaceSmall,
+                  GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/register'),
+                      child: const Text('Register')),
                 ],
               ),
               msg,

@@ -16,16 +16,28 @@ class MenuDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          const UserAccountsDrawerHeader(
+            accountName: Text(
+              'Ryan Tran',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            accountEmail: Text(
+              'Admin',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/287501340_727186358525520_5965701270680697000_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=tn4tSZo_3esAX9hM279&_nc_ht=scontent.fdad3-1.fna&oh=00_AfAnpLtgOIzhHjL046_-f5zTVzJ0iCKKec0YGgwKN9Pmbg&oe=66080F41'),
+              // backgroundImage: AssetImage(
+              //     'assets/images/avatar.png'), // Thay đổi đường dẫn ảnh tương ứng
+            ),
             decoration: BoxDecoration(
               color: Colors.blue,
-            ),
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
             ),
           ),
           ListTile(
@@ -34,7 +46,7 @@ class MenuDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             },
           ),
@@ -45,7 +57,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StatisticalScreen(),
+                  builder: (context) => StatisticalScreen(),
                 ),
               );
             },
@@ -57,7 +69,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RetrievalScreen(),
+                  builder: (context) => RetrievalScreen(),
                 ),
               );
             },
@@ -69,19 +81,19 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SystemScreen(),
+                  builder: (context) => SystemScreen(),
                 ),
               );
             },
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Thong tin ca nhan'),
+            title: Text('Hướng dẫn sử dụng'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
+                  builder: (context) => ProfileScreen(),
                 ),
               );
             },
@@ -93,7 +105,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const SettingScreen(),
+                  builder: (context) => SettingScreen(),
                 ),
               );
             },

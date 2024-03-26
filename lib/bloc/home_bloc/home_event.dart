@@ -8,4 +8,10 @@ class HomeEvent extends Equatable {
   List<Object?> get props => throw UnimplementedError();
 }
 
-class HomeStartEvent extends HomeEvent {}
+class HomeRoomStartEvent extends HomeEvent {}
+
+class HomeServiceStartEvent extends HomeEvent {}
+
+class HomeCustomerStartEvent extends HomeEvent {}
+
+//class HomeStartEvent extends HomeEvent {}

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../bloc/auth_bloc/auth.dart';
 
-class btn_registerWidgets extends StatelessWidget {
+class BtnRegisterWidgets extends StatelessWidget {
   final Function()? onTap;
-  final RegisterBlocCheck registerBlocCheck;
+  final AuthBloc authBloc;
   final String txtName;
 
-  const btn_registerWidgets({
+  const BtnRegisterWidgets({
     super.key,
     required this.onTap,
-    required this.registerBlocCheck,
+    required this.authBloc,
     required this.txtName,
   });
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: registerBlocCheck.btnRegisterStream,
+      stream: authBloc.btnRegisterStream,
       builder: (context, snapshot) {
         return GestureDetector(
           onTap: snapshot.data == true ? onTap : null,
