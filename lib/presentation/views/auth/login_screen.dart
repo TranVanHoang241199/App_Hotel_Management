@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_app_hotel_management/bloc/auth_bloc/auth.dart';
 
-import '../../../data/repositorys/auth_repository.dart';
 import '../../../utils/utils.dart';
 import '../../widgets/btn_login_widget.dart';
 import '../../widgets/pass_input_widget.dart';
@@ -14,10 +13,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(AuthInitState(), AuthRepository()),
-      child: LoginForm(),
-    );
+    return LoginForm();
   }
 }
 

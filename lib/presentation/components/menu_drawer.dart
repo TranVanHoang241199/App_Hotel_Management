@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/widgets/show_logout_dialog_widget.dart';
+import 'package:flutter_app_hotel_management/presentation/components/logout_dialog.dart';
 import 'package:flutter_app_hotel_management/presentation/views/System/system_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/home_screen.dart';
 import 'package:flutter_app_hotel_management/presentation/views/profile/profile_screen.dart';

@@ -1,35 +1,35 @@
 import 'dart:convert';
-import 'package:flutter_app_hotel_management/data/models/room_model.dart';
-import 'package:flutter_app_hotel_management/routes/api_routes.dart';
-import 'package:flutter_app_hotel_management/utils/api_response.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
-class RoomRepository {
-  Future<ApiResponsePagination<RoomModel>> getAllRooms(
-      int status, String search, int currentPage, int pageSize) async {
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../routes/api_routes.dart';
+import '../../utils/utils.dart';
+import '../models/category_room_model.dart';
+
+class CategoryRoomRepository {
+  Future<ApiResponsePagination<CategoryRoomModel>> getAllCategoryRooms(
+      String search, int currentPage, int pageSize) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.get(
         Uri.parse(
-            '${ApiRoutes.apiUrl_room}?status=$status&search=$search&currentPage=$currentPage&pageSize=$pageSize'),
+            '${ApiRoutes.apiUrl_CategoryRoom}?&search=$search&currentPage=$currentPage&pageSize=$pageSize'),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
         },
       );
-      print(" repo1------------" + response.statusCode.toString());
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
-        final List<dynamic> roomsData = responseData['data'] ?? [];
-        print(" repo2------------" + roomsData.toString());
-        final List<RoomModel> rooms = roomsData
-            .map((room) => RoomModel.fromJson(room))
-            .toList(); // Map directly to List<RoomModel>
-        print(" repo2------------" + rooms.length.toString());
+        final List<dynamic> CategoryRoomsData = responseData['data'] ?? [];
+        final List<CategoryRoomModel> CategoryRooms =
+            CategoryRoomsData.map((room) => CategoryRoomModel.fromJson(room))
+                .toList(); // Map directly to List<RoomModel>
 
         final meta = PaginationMeta(
           totalItems: responseData['totalItems'] ?? 0,
@@ -37,13 +37,13 @@ class RoomRepository {
           pageSize: responseData['pageSize'] ?? 0,
         );
 
-        return ApiResponsePagination<RoomModel>(
-          data: rooms,
+        return ApiResponsePagination<CategoryRoomModel>(
+          data: CategoryRooms,
           status: response.statusCode,
           meta: meta,
         );
       } else {
-        return ApiResponsePagination<RoomModel>(
+        return ApiResponsePagination<CategoryRoomModel>(
           status: response.statusCode,
           data: null,
           meta: PaginationMeta(
@@ -55,7 +55,7 @@ class RoomRepository {
         );
       }
     } catch (error) {
-      return ApiResponsePagination<RoomModel>(
+      return ApiResponsePagination<CategoryRoomModel>(
         status: 500,
         data: null,
         meta: PaginationMeta(
@@ -68,42 +68,46 @@ class RoomRepository {
     }
   }
 
-  Future<ApiResponse<RoomModel>> addRoom(RoomModel roomModel) async {
+  Future<ApiResponse<CategoryRoomModel>> addCategoryRoom(
+      String categoryName) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.post(
-        Uri.parse(ApiRoutes.apiUrl_room),
+        Uri.parse(ApiRoutes.apiUrl_CategoryRoom),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(roomModel
-            .toJson()), // Sử dụng phương thức toJson của RoomModel để chuyển đổi thành JSON
+        body: jsonEncode({
+          'categoryname': categoryName,
+        }),
       );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
-        final dynamic roomData = responseData['data'] ?? {};
-        final RoomModel room = RoomModel.fromJson(roomData);
+        final dynamic categoryRoomData = responseData['data'] ?? [];
+        final CategoryRoomModel categoryRoom =
+            CategoryRoomModel.fromJson(categoryRoomData);
 
-        return ApiResponse<RoomModel>(
-          data: room,
+        return ApiResponse<CategoryRoomModel>(
+          data: categoryRoom,
           message: responseData['message'],
           status: response.statusCode,
         );
       } else {
-        return ApiResponse<RoomModel>(
+        return ApiResponse<CategoryRoomModel>(
           data: null,
-          message: 'Failed to add Room. Status Code: ${response.statusCode}',
+          message:
+              'Failed to add Category Room. Status Code: ${response.statusCode}',
           status: response.statusCode,
         );
       }
     } catch (error) {
-      return ApiResponse<RoomModel>(
+      return ApiResponse<CategoryRoomModel>(
         data: null,
         message: 'Error: $error',
         status: 500,
@@ -111,32 +115,35 @@ class RoomRepository {
     }
   }
 
-  Future<ApiResponse<bool>> updateRoom(
-      String roomId, RoomModel roomModel) async {
+  Future<ApiResponse<bool>> updateCategoryRoom(
+      String roomId, String categoryName) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.put(
-        Uri.parse('${ApiRoutes.apiUrl_room}/$roomId'),
+        Uri.parse('${ApiRoutes.apiUrl_CategoryRoom}/$roomId'),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(roomModel.toJson()),
+        body: jsonEncode({
+          'categoryname': categoryName,
+        }),
       );
 
       if (response.statusCode == 200) {
         return ApiResponse<bool>(
           data: true,
-          message: 'Room updated successfully.',
+          message: 'Category Room updated successfully.',
           status: response.statusCode,
         );
       } else {
         return ApiResponse<bool>(
           data: false,
-          message: 'Failed to update Room. Status Code: ${response.statusCode}',
+          message:
+              'Failed to update Category Room. Status Code: ${response.statusCode}',
           status: response.statusCode,
         );
       }
@@ -149,13 +156,13 @@ class RoomRepository {
     }
   }
 
-  Future<ApiResponse<bool>> deleteRoom(String roomId) async {
+  Future<ApiResponse<bool>> deleteCategoryRoom(String roomId) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.delete(
-        Uri.parse('${ApiRoutes.apiUrl_room}/$roomId'),
+        Uri.parse('${ApiRoutes.apiUrl_CategoryRoom}/$roomId'),
         headers: {
           'accept': 'text/plain',
           'Authorization': 'Bearer $accessToken',

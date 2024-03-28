@@ -38,4 +38,6 @@ class ApiRoutes {
 
   static const String apiUrl_service = "${apiUrl_Base}api/v1/service";
   static const String apiUrl_customer = "${apiUrl_Base}api/v1/customers";
+  static const String apiUrl_CategoryRoom =
+      "${apiUrl_Base}api/v1/room-categories";
 }

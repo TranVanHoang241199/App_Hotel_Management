@@ -11,6 +11,10 @@ class Validation {
     return '';
   }
 
+  static String validateCategoryRoomName(String username) {
+    return '';
+  }
+
   static String validateUsername(String username) {
     // if (AuthRepository.checkUsername(username) == 1) {
     //   return 'tai khoan da ton tai';

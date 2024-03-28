@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/presentation/components/System/category_room_system_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/components/System/category_service_system_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/components/System/room_system_screen.dart';
-import 'package:flutter_app_hotel_management/presentation/components/System/service_system_screen.dart';
+
+import 'package:flutter_app_hotel_management/presentation/views/System/system_category_room_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/System/system_category_service_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/System/system_room_view.dart';
+import 'package:flutter_app_hotel_management/presentation/views/System/system_service_view.dart';
 import 'package:flutter_app_hotel_management/presentation/components/menu_drawer.dart';
 
-class SystemScreen extends StatefulWidget {
-  const SystemScreen({super.key});
+class SystemScreen extends StatelessWidget {
+  const SystemScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SystemScreen> createState() => _SystemPageState();
-}
-
-class _SystemPageState extends State<SystemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,35 +23,35 @@ class _SystemPageState extends State<SystemScreen> {
             buttonText: 'Loại phòng',
             icon: Icons.home_work_outlined,
             onPressed: () {
-              _handleButtonPress(1);
+              _handleButtonPress(context, 1); // Truyền context vào hàm
             },
           ),
           CustomSquareButton(
             buttonText: 'Phòng',
             icon: Icons.hotel,
             onPressed: () {
-              _handleButtonPress(2);
+              _handleButtonPress(context, 2); // Truyền context vào hàm
             },
           ),
           CustomSquareButton(
             buttonText: 'Loại phòng dịch vụ',
             icon: Icons.menu_book_sharp,
             onPressed: () {
-              _handleButtonPress(3);
+              _handleButtonPress(context, 3); // Truyền context vào hàm
             },
           ),
           CustomSquareButton(
             buttonText: 'Dịch vụ',
             icon: Icons.room_service,
             onPressed: () {
-              _handleButtonPress(4);
+              _handleButtonPress(context, 4); // Truyền context vào hàm
             },
           ),
           CustomSquareButton(
             buttonText: 'Cách tính tiền',
             icon: Icons.calculate,
             onPressed: () {
-              _handleButtonPress(5);
+              _handleButtonPress(context, 5); // Truyền context vào hàm
             },
           ),
         ],
@@ -63,19 +59,19 @@ class _SystemPageState extends State<SystemScreen> {
     );
   }
 
-  void _handleButtonPress(int buttonNumber) {
+  void _handleButtonPress(BuildContext context, int buttonNumber) {
+    // Thêm tham số context
     switch (buttonNumber) {
       case 1:
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const CategoryRoomSystemScreen()),
+          MaterialPageRoute(builder: (context) => SystemCategoryRoomView()),
         );
         break;
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const RoomSystemScreen()),
+          MaterialPageRoute(builder: (context) => SystemRoomView()),
         );
         break;
       case 3:

@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_hotel_management/data/repositorys/customer_repository.dart';
-import 'package:flutter_app_hotel_management/data/repositorys/service_repository.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/customer_home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/history_home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/room_home_view.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/service_home_view.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../bloc/home_bloc/home.dart';
-import '../../../data/repositorys/room_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,34 +30,27 @@ class _HomeScreenState extends State<HomeScreen> {
       HistoryHomeView(),
     ];
 
-    return BlocProvider(
-      create: (context) => HomeBloc(
-          initState: HomeInitState(),
-          roomRepo: RoomRepository(),
-          customerRepo: CustomerRepository(),
-          serviceRepo: ServiceRepository()),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            pages[_selectedIndex],
-            // Positioned(
-            //   right: 16.0,
-            //   bottom: 16.0,
-            //   child: OrderHomeButton(
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => OrderScreen(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
-          ],
-        ),
-        bottomNavigationBar: _MenuBotton(),
+    return Scaffold(
+      body: Stack(
+        children: [
+          pages[_selectedIndex],
+          // Positioned(
+          //   right: 16.0,
+          //   bottom: 16.0,
+          //   child: OrderHomeButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => OrderScreen(),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
+        ],
       ),
+      bottomNavigationBar: _MenuBotton(),
     );
   }
 

@@ -40,4 +40,22 @@ class RoomModel {
       categoryRoomId: json['categoryRoomId'],
     );
   }
+
+  // Method to convert RoomModel to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'createdDate': createdDate
+          ?.toIso8601String(), // Chuyển đổi DateTime thành chuỗi ISO 8601
+      'createdBy': createdBy,
+      'modifiedDate': modifiedDate
+          ?.toIso8601String(), // Chuyển đổi DateTime thành chuỗi ISO 8601
+      'modifiedBy': modifiedBy,
+      'roomName': roomName,
+      'floorNumber': floorNumber,
+      'priceAmount': priceAmount,
+      'status': status,
+      'categoryRoomId': categoryRoomId,
+    };
+  }
 }

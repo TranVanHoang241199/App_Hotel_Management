@@ -1,34 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
-  final String errorMessage;
-  final VoidCallback? onRetry;
+  final String message;
 
   const ErrorDialog({
-    required this.errorMessage,
-    this.onRetry,
+    required this.message,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Error"),
-      content: Text(errorMessage),
+      title: Text('Error'),
+      content: Text(message),
       actions: [
-        if (onRetry != null)
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              onRetry!();
-            },
-            child: Text("Retry"),
-          ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(null);
           },
-          child: Text("OK"),
+          child: Text('OK'),
         ),
       ],
     );

@@ -10,7 +10,8 @@ class RoomHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<HomeBloc>(context).add(HomeRoomStartEvent());
+    final homeBloc = BlocProvider.of<HomeBloc>(context);
+    homeBloc.add(HomeRoomStartEvent());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Phòng"),
@@ -35,7 +36,7 @@ class RoomHomeView extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () async {
           // Gửi sự kiện HomeStartEvent để load lại dữ liệu
-          BlocProvider.of<HomeBloc>(context).add(HomeRoomStartEvent());
+          homeBloc.add(HomeRoomStartEvent());
         },
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {

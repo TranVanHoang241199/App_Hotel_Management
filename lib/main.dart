@@ -11,6 +11,12 @@ import 'package:flutter_app_hotel_management/presentation/views/statistical/stat
 import 'package:flutter_app_hotel_management/utils/config.dart';
 import 'package:flutter_app_hotel_management/presentation/views/home/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/home_bloc/home.dart';
+import 'bloc/system_bloc/system.dart';
+import 'data/repositorys/category_room_repository.dart';
+import 'data/repositorys/customer_repository.dart';
+import 'data/repositorys/room_repository.dart';
+import 'data/repositorys/service_repository.dart';
 import 'presentation/views/Error/error_screen.dart';
 import 'presentation/views/auth/login_screen.dart';
 
@@ -28,7 +34,20 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => AuthBloc(AuthInitState(), AuthRepository()))
+            create: (context) => AuthBloc(AuthInitState(), AuthRepository())),
+        BlocProvider(
+          create: (context) => SystemBloc(
+            initState: SystemInitState(),
+            categoryRoomRepo: CategoryRoomRepository(),
+            roomRepo: RoomRepository(),
+          ),
+        ),
+        BlocProvider(
+            create: (context) => HomeBloc(
+                initState: HomeInitState(),
+                roomRepo: RoomRepository(),
+                customerRepo: CustomerRepository(),
+                serviceRepo: ServiceRepository()))
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
