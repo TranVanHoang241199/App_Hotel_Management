@@ -1,5 +1,5 @@
 class RoomModel {
-  final String id;
+  final String? id;
   final DateTime? createdDate;
   final String? createdBy;
   final DateTime? modifiedDate;
@@ -11,7 +11,7 @@ class RoomModel {
   final String? categoryRoomId;
 
   RoomModel({
-    required this.id,
+    this.id,
     this.createdDate,
     this.createdBy,
     this.modifiedDate,

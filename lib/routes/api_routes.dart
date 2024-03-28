@@ -40,4 +40,6 @@ class ApiRoutes {
   static const String apiUrl_customer = "${apiUrl_Base}api/v1/customers";
   static const String apiUrl_CategoryRoom =
       "${apiUrl_Base}api/v1/room-categories";
+  static const String apiUrl_CategoryService =
+      "${apiUrl_Base}api/v1/services-categories";
 }

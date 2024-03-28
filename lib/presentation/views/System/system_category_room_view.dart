@@ -91,7 +91,7 @@ class SystemCategoryRoomView extends StatelessWidget {
                         );
                       } else {
                         return Center(
-                          child: Text("Looix khong load dc."),
+                          child: Text('Lỗi khonogloading được'),
                         );
                       }
                     },
@@ -111,31 +111,32 @@ class SystemCategoryRoomView extends StatelessWidget {
       itemCount: state.listCategoryRoom.length,
       itemBuilder: (context, index) {
         final categoryRoom = state.listCategoryRoom[index];
-        return ListTile(
-          title: Card(
-            child: Padding(
+        return Card(
+          margin: EdgeInsets.all(8.0),
+          child: ListTile(
+            title: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(categoryRoom.categoryName),
             ),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  // Xử lý sự kiện sửa danh mục phòng
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  // Xử lý sự kiện xoá danh mục phòng
-                  BlocProvider.of<SystemBloc>(context)
-                      .add(SystemCategoryRoomDeletePressed(categoryRoom.id));
-                },
-              ),
-            ],
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    // Xử lý sự kiện sửa danh mục phòng
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    // Xử lý sự kiện xoá danh mục phòng
+                    BlocProvider.of<SystemBloc>(context)
+                        .add(SystemCategoryRoomDeletePressed(categoryRoom.id));
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

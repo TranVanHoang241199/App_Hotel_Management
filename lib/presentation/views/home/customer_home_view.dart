@@ -94,12 +94,12 @@ class CustomerHomeView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ListView.builder(
-        itemCount: state.length,
+        itemCount: state.listCustomer.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
-              title: Text(state[index].customerName),
-              subtitle: Text(state[index].customerPhone),
+              title: Text(state.listCustomer[index].customerName),
+              subtitle: Text(state.listCustomer[index].customerPhone),
               // You can add more widgets here for additional information
             ),
           );

@@ -1,12 +1,9 @@
 class CustomerModel {
-  final String identifier;
-  final String customerPhone;
-  final String customerName;
+  final String? identifier;
+  final String? customerPhone;
+  final String? customerName;
 
-  CustomerModel(
-      {required this.identifier,
-      required this.customerPhone,
-      required this.customerName});
+  CustomerModel({this.identifier, this.customerPhone, this.customerName});
 
   // Factory method to create RoomViewModel from a Map
   factory CustomerModel.fromJson(Map<String, dynamic> json) {

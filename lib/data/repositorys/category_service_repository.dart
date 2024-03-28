@@ -1,21 +1,22 @@
 import 'dart:convert';
-import 'package:flutter_app_hotel_management/routes/api_routes.dart';
-import 'package:flutter_app_hotel_management/utils/api_response.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-import '../models/service_model.dart';
+import '../../routes/api_routes.dart';
+import '../../utils/utils.dart';
+import '../models/category_service_model.dart';
 
-class ServiceRepository {
-  Future<ApiResponsePagination<ServiceModel>> getAllServices(
-      int status, String search, int currentPage, int pageSize) async {
+class CategoryServiceRepository {
+  Future<ApiResponsePagination<CategoryServiceModel>> getAllCategoryServices(
+      String search, int currentPage, int pageSize) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.get(
         Uri.parse(
-            '${ApiRoutes.apiUrl_service}?status=$status&search=$search&currentPage=$currentPage&pageSize=$pageSize'),
+            '${ApiRoutes.apiUrl_CategoryService}?&search=$search&currentPage=$currentPage&pageSize=$pageSize'),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -25,10 +26,9 @@ class ServiceRepository {
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
-        final List<dynamic> servicesData = responseData['data'] ?? [];
-        print(" repo2------------" + servicesData.toString());
-        final List<ServiceModel> services = servicesData
-            .map((Service) => ServiceModel.fromJson(Service))
+        final List<dynamic> categoryServicesData = responseData['data'] ?? [];
+        final List<CategoryServiceModel> categoryServices = categoryServicesData
+            .map((service) => CategoryServiceModel.fromJson(service))
             .toList(); // Map directly to List<ServiceModel>
 
         final meta = PaginationMeta(
@@ -37,13 +37,13 @@ class ServiceRepository {
           pageSize: responseData['pageSize'] ?? 0,
         );
 
-        return ApiResponsePagination<ServiceModel>(
-          data: services,
+        return ApiResponsePagination<CategoryServiceModel>(
+          data: categoryServices,
           status: response.statusCode,
           meta: meta,
         );
       } else {
-        return ApiResponsePagination<ServiceModel>(
+        return ApiResponsePagination<CategoryServiceModel>(
           status: response.statusCode,
           data: null,
           meta: PaginationMeta(
@@ -55,7 +55,7 @@ class ServiceRepository {
         );
       }
     } catch (error) {
-      return ApiResponsePagination<ServiceModel>(
+      return ApiResponsePagination<CategoryServiceModel>(
         status: 500,
         data: null,
         meta: PaginationMeta(
@@ -68,43 +68,46 @@ class ServiceRepository {
     }
   }
 
-  Future<ApiResponse<ServiceModel>> addService(
-      ServiceModel serviceModel) async {
+  Future<ApiResponse<CategoryServiceModel>> addCategoryService(
+      String categoryName) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
-      print(" chuc mung vao repo -----------------");
+
       final response = await http.post(
-        Uri.parse(ApiRoutes.apiUrl_service),
+        Uri.parse(ApiRoutes.apiUrl_CategoryService),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(serviceModel
-            .toJson()), // Sử dụng phương thức toJson của ServiceModel để chuyển đổi thành JSON
+        body: jsonEncode({
+          'categoryname': categoryName,
+        }),
       );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
-        final dynamic serviceData = responseData['data'] ?? {};
-        final ServiceModel Service = ServiceModel.fromJson(serviceData);
+        final dynamic categoryServiceData = responseData['data'] ?? [];
+        final CategoryServiceModel categoryService =
+            CategoryServiceModel.fromJson(categoryServiceData);
 
-        return ApiResponse<ServiceModel>(
-          data: Service,
+        return ApiResponse<CategoryServiceModel>(
+          data: categoryService,
           message: responseData['message'],
           status: response.statusCode,
         );
       } else {
-        return ApiResponse<ServiceModel>(
+        return ApiResponse<CategoryServiceModel>(
           data: null,
-          message: 'Failed to add Service. Status Code: ${response.statusCode}',
+          message:
+              'Failed to add Category Service. Status Code: ${response.statusCode}',
           status: response.statusCode,
         );
       }
     } catch (error) {
-      return ApiResponse<ServiceModel>(
+      return ApiResponse<CategoryServiceModel>(
         data: null,
         message: 'Error: $error',
         status: 500,
@@ -112,33 +115,35 @@ class ServiceRepository {
     }
   }
 
-  Future<ApiResponse<bool>> updateService(
-      String serviceId, ServiceModel serviceModel) async {
+  Future<ApiResponse<bool>> updateCategoryService(
+      String ServiceId, String categoryName) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.put(
-        Uri.parse('${ApiRoutes.apiUrl_service}/$serviceId'),
+        Uri.parse('${ApiRoutes.apiUrl_CategoryService}/$ServiceId'),
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(serviceModel.toJson()),
+        body: jsonEncode({
+          'categoryname': categoryName,
+        }),
       );
 
       if (response.statusCode == 200) {
         return ApiResponse<bool>(
           data: true,
-          message: 'Service updated successfully.',
+          message: 'Category Service updated successfully.',
           status: response.statusCode,
         );
       } else {
         return ApiResponse<bool>(
           data: false,
           message:
-              'Failed to update Service. Status Code: ${response.statusCode}',
+              'Failed to update Category Service. Status Code: ${response.statusCode}',
           status: response.statusCode,
         );
       }
@@ -151,13 +156,13 @@ class ServiceRepository {
     }
   }
 
-  Future<ApiResponse<bool>> deleteService(String serviceId) async {
+  Future<ApiResponse<bool>> deleteCategoryService(String ServiceId) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
 
       final response = await http.delete(
-        Uri.parse('${ApiRoutes.apiUrl_service}/$serviceId'),
+        Uri.parse('${ApiRoutes.apiUrl_CategoryService}/$ServiceId'),
         headers: {
           'accept': 'text/plain',
           'Authorization': 'Bearer $accessToken',

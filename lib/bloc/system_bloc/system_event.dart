@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_app_hotel_management/data/models/room_model.dart';
 
+import '../../data/models/service_model.dart';
+
 class SystemEvent extends Equatable {
   SystemEvent();
   @override
@@ -36,28 +38,67 @@ class SystemRoomStartEvent extends SystemEvent {}
 class SystemCategoryRoomSelectEvent extends SystemEvent {}
 
 class SystemRoomCreatePressedEvent extends SystemEvent {
-  final RoomModel room;
+  final RoomModel roomModel;
 
-  SystemRoomCreatePressedEvent({required this.room});
+  SystemRoomCreatePressedEvent(
+      this.roomModel); // Thêm tham số roomModel vào đây
 }
 
 class SystemRoomUpdatePressedEvent extends SystemEvent {
-  final RoomModel room;
+  final RoomModel roomModel;
 
-  SystemRoomUpdatePressedEvent({required this.room});
+  SystemRoomUpdatePressedEvent(this.roomModel);
 }
 
 class SystemRoomDeletePressedEvent extends SystemEvent {
   final String id;
 
-  SystemRoomDeletePressedEvent({required this.id});
+  SystemRoomDeletePressedEvent(this.id);
 }
 // End: Room
 
+// Begin: Category Service
 class SystemCategoryServiceStartEvent extends SystemEvent {}
 
-class SystemCategoryServicePressed extends SystemEvent {}
+class SystemCategoryServiceCreatePressed extends SystemEvent {
+  final String categoryName;
 
+  SystemCategoryServiceCreatePressed(this.categoryName);
+
+  @override
+  List<Object?> get props => [categoryName];
+}
+
+class SystemCategoryServiceDeletePressed extends SystemEvent {
+  final String id;
+
+  SystemCategoryServiceDeletePressed(this.id);
+
+  @override
+  List<Object?> get props => [id];
+}
+// End: Category Service
+
+// Begin: Service
 class SystemServiceStartEvent extends SystemEvent {}
 
-class SystemServicePressed extends SystemEvent {}
+class SystemCategoryServiceSelectEvent extends SystemEvent {}
+
+class SystemServiceCreatePressedEvent extends SystemEvent {
+  final ServiceModel serviceModel;
+
+  SystemServiceCreatePressedEvent(this.serviceModel);
+}
+
+class SystemServiceUpdatePressedEvent extends SystemEvent {
+  final ServiceModel serviceModel;
+
+  SystemServiceUpdatePressedEvent(this.serviceModel);
+}
+
+class SystemServiceDeletePressedEvent extends SystemEvent {
+  final String id;
+
+  SystemServiceDeletePressedEvent(this.id);
+}
+// End: Service

@@ -77,14 +77,13 @@ class SystemScreen extends StatelessWidget {
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const CategoryServiceSystemScreen()),
+          MaterialPageRoute(builder: (context) => SystemCategoryServiceView()),
         );
         break;
       case 4:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ServiceSystemScreen()),
+          MaterialPageRoute(builder: (context) => SystemServiceView()),
         );
         break;
       case 5:

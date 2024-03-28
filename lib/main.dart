@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/home_bloc/home.dart';
 import 'bloc/system_bloc/system.dart';
 import 'data/repositorys/category_room_repository.dart';
+import 'data/repositorys/category_service_repository.dart';
 import 'data/repositorys/customer_repository.dart';
 import 'data/repositorys/room_repository.dart';
 import 'data/repositorys/service_repository.dart';
@@ -37,10 +38,11 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(AuthInitState(), AuthRepository())),
         BlocProvider(
           create: (context) => SystemBloc(
-            initState: SystemInitState(),
-            categoryRoomRepo: CategoryRoomRepository(),
-            roomRepo: RoomRepository(),
-          ),
+              initState: SystemInitState(),
+              categoryRoomRepo: CategoryRoomRepository(),
+              roomRepo: RoomRepository(),
+              categoryServiceRepo: CategoryServiceRepository(),
+              serviceRepo: ServiceRepository()),
         ),
         BlocProvider(
             create: (context) => HomeBloc(

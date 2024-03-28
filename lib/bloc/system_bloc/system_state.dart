@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 import '../../data/models/category_room_model.dart';
+import '../../data/models/category_service_model.dart';
 import '../../data/models/room_model.dart';
+import '../../data/models/service_model.dart';
 
 class SystemState extends Equatable {
   const SystemState();
@@ -55,8 +57,9 @@ class SystemCategoryRoomDeleteErrorState extends SystemState {
   final String message;
   const SystemCategoryRoomDeleteErrorState(this.message);
 }
-// Begin: Category Room
 
+// Begin: Category Room
+//--------------------------------------------------------------
 // Begin: Room
 class SystemRoomLoadingState extends SystemState {}
 
@@ -105,5 +108,102 @@ class SystemRoomDeleteErrorState extends SystemState {
   final String message;
   const SystemRoomDeleteErrorState(this.message);
 }
-// End: Room
 
+// End: Room
+//--------------------------------------------------------------
+// Begin: Category Service
+class SystemCategoryServiceLoadingState extends SystemState {}
+
+class SystemCategoryServiceDataSuccessState extends SystemState {
+  final List<CategoryServiceModel> listCategoryService;
+  const SystemCategoryServiceDataSuccessState(this.listCategoryService);
+}
+
+class SystemCategoryServiceNoDataState extends SystemState {
+  final String message;
+  const SystemCategoryServiceNoDataState(this.message);
+}
+
+class SystemCategoryServiceDataErrorState extends SystemState {
+  final String message;
+  const SystemCategoryServiceDataErrorState(this.message);
+}
+
+class SystemCategoryServiceSuccessCreateState extends SystemState {
+  final CategoryServiceModel categoryServiceModel;
+  const SystemCategoryServiceSuccessCreateState(this.categoryServiceModel);
+}
+
+class SystemCategoryServiceDeleteSuccessState extends SystemState {
+  final String message;
+  const SystemCategoryServiceDeleteSuccessState(this.message);
+}
+
+class SystemCategoryServiceMessageSuccessState extends SystemState {
+  final String message;
+  const SystemCategoryServiceMessageSuccessState(this.message);
+}
+
+class SystemCategoryServiceCreatetUpdateErrorState extends SystemState {
+  final String txtName;
+  final String message;
+  const SystemCategoryServiceCreatetUpdateErrorState(
+      this.message, this.txtName);
+}
+
+class SystemCategoryServiceDeleteErrorState extends SystemState {
+  final String message;
+  const SystemCategoryServiceDeleteErrorState(this.message);
+}
+
+// Begin: Category Service
+//--------------------------------------------------------------
+// Begin: Service
+class SystemServiceLoadingState extends SystemState {}
+
+class SystemServiceDataSuccessState extends SystemState {
+  final List<ServiceModel> listService;
+  const SystemServiceDataSuccessState(this.listService);
+}
+
+class SystemCategoryServiceDataSelectSuccessState extends SystemState {
+  final List<CategoryServiceModel> listCategoryService;
+  const SystemCategoryServiceDataSelectSuccessState(this.listCategoryService);
+}
+
+class SystemServiceNoDataState extends SystemState {
+  final String message;
+  const SystemServiceNoDataState(this.message);
+}
+
+class SystemCategoryServiceNoDataSelectState extends SystemState {
+  final String message;
+  const SystemCategoryServiceNoDataSelectState(this.message);
+}
+
+class SystemServiceDataErrorState extends SystemState {
+  final String message;
+  const SystemServiceDataErrorState(this.message);
+}
+
+class SystemCategoryServiceDataSelectErrorState extends SystemState {
+  final String message;
+  const SystemCategoryServiceDataSelectErrorState(this.message);
+}
+
+class SystemServiceMessageSuccessState extends SystemState {
+  final String message;
+  const SystemServiceMessageSuccessState(this.message);
+}
+
+class SystemServiceCreatetUpdateErrorState extends SystemState {
+  final String txtName;
+  final String message;
+  const SystemServiceCreatetUpdateErrorState(this.message, this.txtName);
+}
+
+class SystemServiceDeleteErrorState extends SystemState {
+  final String message;
+  const SystemServiceDeleteErrorState(this.message);
+}
+// End: Service
